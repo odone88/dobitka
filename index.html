@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOBITKA — Piłka. Sport. Bez ściemy.</title>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #09090f;
+  --panel: #0e0e1a;
+  --bdr:   #252540;
+  --gold:  #FFD700;
+  --red:   #CC1100;
+  --green: #00BB44;
+  --blue:  #0d2060;
+  --text:  #cccccc;
+  --muted: #555566;
+  --link:  #7799ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Courier Prime', 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--gold); text-decoration: underline; }
+
+/* TICKER */
+.ticker-wrap { background: var(--red); overflow: hidden; white-space: nowrap; padding: 5px 0; }
+.ticker-label { background: var(--gold); color: #000; font-weight: 700; font-size: 11px; padding: 0 10px; margin-right: 8px; letter-spacing: 1px; font-family: Arial, sans-serif; }
+.ticker-text { display: inline-block; animation: scroll 50s linear infinite; font-size: 12px; color: #fff; letter-spacing: 0.5px; font-family: Arial, sans-serif; }
+@keyframes scroll { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+
+/* HEADER */
+header { background: linear-gradient(180deg, #060614 0%, var(--bg) 100%); border-bottom: 3px solid var(--gold); padding: 20px 0 14px; text-align: center; }
+.logo { font-family: 'Courier New', monospace; font-size: 42px; font-weight: 900; color: var(--gold); text-shadow: 3px 3px 0 #770000, 5px 5px 0 #330000; letter-spacing: 8px; }
+.tagline { font-size: 13px; color: #888; margin-top: 6px; letter-spacing: 3px; text-transform: uppercase; font-family: Arial, sans-serif; }
+.updated { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: Arial, sans-serif; }
+.updated span { color: var(--gold); }
+
+/* NAV */
+nav { background: #0a0a18; border-bottom: 2px solid var(--bdr); text-align: center; padding: 0; }
+nav a { display: inline-block; padding: 9px 16px; font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 1px; text-transform: uppercase; border-right: 1px solid var(--bdr); font-family: Arial, sans-serif; transition: all 0.15s; }
+nav a:first-child { border-left: 1px solid var(--bdr); }
+nav a:hover { background: var(--blue); color: var(--gold); text-decoration: none; }
+
+/* LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: 16px 12px; display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+
+/* BOX */
+.box { background: var(--panel); border: 1px solid var(--bdr); margin-bottom: 16px; }
+.box-hdr { background: var(--blue); padding: 7px 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-family: Arial, sans-serif; }
+.box-hdr .sub { font-size: 10px; color: #aaa; font-weight: 400; text-transform: none; letter-spacing: 0; }
+.no-data { padding: 10px 14px; color: var(--muted); font-size: 12px; font-style: italic; }
+
+/* LINKI */
+.link-item { padding: 14px; border-bottom: 1px solid var(--bdr); }
+.link-item:last-child { border-bottom: none; }
+.link-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; font-family: Arial, sans-serif; color: var(--muted); }
+.link-cat.ucl { color: #4488ff; } .link-cat.laliga { color: #cc8800; } .link-cat.pl { color: #7700cc; } .link-cat.ekstraklasa { color: var(--green); }
+.link-title { font-size: 17px; font-weight: 700; color: #eee; line-height: 1.2; margin-bottom: 5px; font-family: Arial, sans-serif; }
+.link-title a { color: #eee; }
+.link-title a:hover { color: var(--gold); }
+.link-desc { font-size: 12px; color: #999; line-height: 1.5; font-style: italic; }
+.link-source { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.link-source::before { content: "▶ "; color: var(--gold); }
+
+/* WYNIKI */
+.result-row { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 1fr 60px 1fr; gap: 6px; align-items: center; font-size: 13px; }
+.result-row:last-child { border-bottom: none; }
+.r-home { text-align: right; color: #ccc; }
+.r-away { text-align: left; color: #ccc; }
+.r-score { text-align: center; font-family: 'Courier New', monospace; font-size: 16px; font-weight: 900; padding: 1px 4px; border: 1px solid #333; }
+.r-score.win-h { color: var(--green); border-color: var(--green); }
+.r-score.win-a { color: #ff6644; border-color: #ff6644; }
+.r-score.draw   { color: #ccc; border-color: #444; }
+
+/* NADCHODZĄCE MECZE */
+.upcoming-row { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 1fr 30px 1fr 60px; gap: 6px; align-items: center; font-size: 12px; }
+.upcoming-row:last-child { border-bottom: none; }
+.u-home { text-align: right; color: #ccc; }
+.u-away { color: #ccc; }
+.u-vs { text-align: center; color: var(--muted); font-size: 11px; }
+.u-time { text-align: right; font-family: 'Courier New', monospace; color: var(--gold); font-size: 13px; }
+
+/* TABELE LIGOWE — TABS */
+.tab-btns { display: flex; flex-wrap: wrap; background: #0a0a18; border-bottom: 1px solid var(--bdr); }
+.tab-btn { background: none; border: none; border-right: 1px solid var(--bdr); color: #888; padding: 8px 12px; font-size: 11px; font-family: Arial, sans-serif; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.15s; }
+.tab-btn:hover { background: var(--blue); color: var(--gold); }
+.tab-btn.active { background: var(--blue); color: var(--gold); border-bottom: 2px solid var(--gold); }
+.tab-pane { display: none; padding: 12px; }
+.tab-pane.active { display: block; }
+.tab-league-title { font-weight: 700; font-size: 15px; color: var(--gold); margin-bottom: 10px; font-family: Arial, sans-serif; }
+.subsection-title { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin: 14px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--bdr); font-family: Arial, sans-serif; }
+
+/* STANDINGS TABLE */
+.standings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.standings-table .s-header { color: #666; font-size: 10px; font-family: Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--bdr); }
+.standings-table th, .standings-table td { padding: 4px 3px; }
+.s-pos { text-align: right; width: 20px; color: #666; }
+.s-team { padding-left: 8px !important; }
+.s-num { text-align: center; width: 26px; color: #999; }
+.s-gd { color: #888 !important; }
+.s-pts { text-align: center; width: 30px; color: var(--gold) !important; font-weight: 700; }
+.standings-table tr:hover { background: #111125; }
+
+/* CIEKAWOSTKI */
+.ciekawostka-item { padding: 12px 14px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; }
+.ciekawostka-item:last-child { border-bottom: none; }
+.ciek-num { font-family: 'Courier New', monospace; font-size: 22px; color: var(--gold); opacity: 0.5; flex-shrink: 0; line-height: 1; }
+.ciekawostka-item p { font-size: 13px; color: #aaa; line-height: 1.5; }
+.ciekawostka-item p strong { color: #ddd; }
+
+/* RADAR */
+.radar-item { padding: 9px 14px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; font-size: 13px; }
+.radar-item:last-child { border-bottom: none; }
+.r-bullet { color: var(--gold); flex-shrink: 0; }
+.r-desc { font-size: 11px; color: var(--muted); display: block; }
+
+/* SZYBKIE LINKI */
+.quick-link { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.quick-link:last-child { border-bottom: none; }
+.quick-link span { color: var(--muted); font-size: 12px; }
+.quick-link a { font-weight: 700; }
+
+/* TABLE NAV (prawa kolumna) */
+.table-nav { display: flex; flex-direction: column; }
+.table-nav a { padding: 9px 14px; border-bottom: 1px solid var(--bdr); font-size: 13px; color: #bbb; display: flex; justify-content: space-between; font-family: Arial, sans-serif; }
+.table-nav a:last-child { border-bottom: none; }
+.table-nav a::after { content: "→"; color: var(--muted); }
+.table-nav a:hover { background: #111125; color: var(--gold); text-decoration: none; }
+
+/* FOOTER */
+footer { background: #050508; border-top: 2px solid var(--bdr); text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-family: Arial, sans-serif; }
+footer a { color: #444; }
+
+@media (max-width: 768px) {
+  .container { grid-template-columns: 1fr; }
+  .logo { font-size: 28px; letter-spacing: 4px; }
+  nav a { padding: 8px 10px; font-size: 10px; }
+  .tab-btn { font-size: 10px; padding: 7px 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ticker-wrap">
+  <span class="ticker-label">▶ LIVE</span>
+  <span class="ticker-text">
+    ★ DOBITKA — aktualizacja co 2 godziny ★ Champions League • Premier League • La Liga • Serie A • Ligue 1 • Ekstraklasa ★ Wyniki, tabele, linki — bez ściemy ★
+  </span>
+</div>
+
+<header>
+  <div class="logo">⚽ DOBITKA</div>
+  <div class="tagline">// Piłka. Sport. Bez ściemy. //</div>
+  <div class="updated">Ostatnia aktualizacja: <span>16.03.2026 23:18</span> &nbsp;|&nbsp; Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a></div>
+</header>
+
+<nav>
+  <a href="#linki">🔥 Linki</a>
+  <a href="#tabele">📊 Tabele & Wyniki</a>
+  <a href="#ciekawostki">🧠 Ciekawostki</a>
+  <a href="#radar">🔭 Radary</a>
+  <a href="https://www.flashscore.pl" target="_blank">⚡ Live</a>
+</nav>
+
+<div class="container">
+
+  <!-- LEWA KOLUMNA -->
+  <div>
+
+    <div class="box" id="linki">
+      <div class="box-hdr">🔥 Gorące Linki <span class="sub">wybrane przez redakcję</span></div>
+      <div class="link-item">
+          <div class="link-cat ucl">Liga Mistrzów</div>
+          <div class="link-title"><a href="https://www.uefa.com/uefachampionsleague/" target="_blank">Champions League — terminarz, wyniki, tabela</a></div>
+          <div class="link-desc">Faza pucharowa UCL to najpiękniejsze 90 minut w kalendarzu kibiców — lub najgorsze, jeśli grasz o awans z jednobramkową zaliczką. Pełny terminarz i wyniki na stronie UEFA.</div>
+          <div class="link-source">▶ UEFA.com</div>
+        </div>
+<div class="link-item">
+          <div class="link-cat laliga">La Liga</div>
+          <div class="link-title"><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Yamal vs Vinicius — młodość kontra doświadczenie, Barceloneta kontra Bernabéu</a></div>
+          <div class="link-desc">Klasico w tym sezonie to osobny gatunek dramaturgii. Kompletne statystyki zawodników i drużyn La Ligi na FBref — jeśli liczby są twoją miłością.</div>
+          <div class="link-source">▶ FBref.com</div>
+        </div>
+<div class="link-item">
+          <div class="link-cat pl">Premier League</div>
+          <div class="link-title"><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Premier League — gdzie kupują za miliardy, gdzie grają na wynik</a></div>
+          <div class="link-desc">Liga z największymi budżetami świata i najlepszą atmosferą. Statystyki, xG, pressowanie — wszystko co trzeba na FBref.</div>
+          <div class="link-source">▶ FBref.com</div>
+        </div>
+<div class="link-item">
+          <div class="link-cat ekstraklasa">Ekstraklasa</div>
+          <div class="link-title"><a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Ekstraklasa — bo warto wiedzieć co u sąsiadów słychać</a></div>
+          <div class="link-desc">Polska liga ma swoje uroki — niespodzianki, derby i od czasu do czasu piłkę, którą naprawdę warto obejrzeć. Wyniki i tabela na żywo.</div>
+          <div class="link-source">▶ Sofascore</div>
+        </div>
+<div class="link-item">
+          <div class="link-cat ">Transfery</div>
+          <div class="link-title"><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt — ile naprawdę wart jest twój ulubiony zawodnik?</a></div>
+          <div class="link-desc">Biblia wycen piłkarskich. Sprawdzasz czy nowy nabytek twojego klubu jest warty tyle co za niego zapłacono — Transfermarkt nie kłamie (przynajmniej nie bardziej niż agenci).</div>
+          <div class="link-source">▶ Transfermarkt.pl</div>
+        </div>
+
+    </div>
+
+    <!-- TABELE I WYNIKI — ZAKŁADKI -->
+    <div class="box" id="tabele">
+      <div class="box-hdr">📊 Tabele, Wyniki & Terminarz <span class="sub">football-data.org</span></div>
+      <div class="tab-btns">
+        <button class="tab-btn active" onclick="showTab('PL')">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
+<button class="tab-btn" onclick="showTab('PD')">🇪🇸 La Liga</button>
+<button class="tab-btn" onclick="showTab('SA')">🇮🇹 Serie A</button>
+<button class="tab-btn" onclick="showTab('FL1')">🇫🇷 Ligue 1</button>
+<button class="tab-btn" onclick="showTab('CL')">⭐ Champions League</button>
+<button class="tab-btn" onclick="showTab('PPL')">🇵🇱 Ekstraklasa</button>
+
+      </div>
+      <div class="tab-pane" id="tab-PL">
+          <div class="tab-league-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</div>
+          <p class="no-data">Brak danych — sprawdź <a href="https://www.sofascore.com/tournament/football/england/premier-league/17" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Ostatnie wyniki</div>
+          <p class="no-data">Brak wyników — <a href="https://www.sofascore.com/tournament/football/england/premier-league/17" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Najbliższe mecze</div>
+          <p class="no-data">Brak terminarzа — <a href="https://www.sofascore.com/tournament/football/england/premier-league/17" target="_blank">Sofascore</a></p>
+        </div>
+<div class="tab-pane" id="tab-PD">
+          <div class="tab-league-title">🇪🇸 La Liga</div>
+          <p class="no-data">Brak danych — sprawdź <a href="https://www.sofascore.com/tournament/football/spain/laliga/8" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Ostatnie wyniki</div>
+          <p class="no-data">Brak wyników — <a href="https://www.sofascore.com/tournament/football/spain/laliga/8" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Najbliższe mecze</div>
+          <p class="no-data">Brak terminarzа — <a href="https://www.sofascore.com/tournament/football/spain/laliga/8" target="_blank">Sofascore</a></p>
+        </div>
+<div class="tab-pane" id="tab-SA">
+          <div class="tab-league-title">🇮🇹 Serie A</div>
+          <p class="no-data">Brak danych — sprawdź <a href="https://www.sofascore.com/tournament/football/italy/serie-a/23" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Ostatnie wyniki</div>
+          <p class="no-data">Brak wyników — <a href="https://www.sofascore.com/tournament/football/italy/serie-a/23" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Najbliższe mecze</div>
+          <p class="no-data">Brak terminarzа — <a href="https://www.sofascore.com/tournament/football/italy/serie-a/23" target="_blank">Sofascore</a></p>
+        </div>
+<div class="tab-pane" id="tab-FL1">
+          <div class="tab-league-title">🇫🇷 Ligue 1</div>
+          <p class="no-data">Brak danych — sprawdź <a href="https://www.sofascore.com/tournament/football/france/ligue-1/34" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Ostatnie wyniki</div>
+          <p class="no-data">Brak wyników — <a href="https://www.sofascore.com/tournament/football/france/ligue-1/34" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Najbliższe mecze</div>
+          <p class="no-data">Brak terminarzа — <a href="https://www.sofascore.com/tournament/football/france/ligue-1/34" target="_blank">Sofascore</a></p>
+        </div>
+<div class="tab-pane" id="tab-CL">
+          <div class="tab-league-title">⭐ Champions League</div>
+          <p class="no-data">Brak danych — sprawdź <a href="https://www.sofascore.com/tournament/football/europe/uefa-champions-league/7" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Ostatnie wyniki</div>
+          <p class="no-data">Brak wyników — <a href="https://www.sofascore.com/tournament/football/europe/uefa-champions-league/7" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Najbliższe mecze</div>
+          <p class="no-data">Brak terminarzа — <a href="https://www.sofascore.com/tournament/football/europe/uefa-champions-league/7" target="_blank">Sofascore</a></p>
+        </div>
+<div class="tab-pane" id="tab-PPL">
+          <div class="tab-league-title">🇵🇱 Ekstraklasa</div>
+          <p class="no-data">Brak danych — sprawdź <a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Ostatnie wyniki</div>
+          <p class="no-data">Brak wyników — <a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Sofascore</a></p>
+          <div class="subsection-title">Najbliższe mecze</div>
+          <p class="no-data">Brak terminarzа — <a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Sofascore</a></p>
+        </div>
+
+    </div>
+
+  </div>
+
+  <!-- PRAWA KOLUMNA -->
+  <div>
+
+    <div class="box" id="ciekawostki">
+      <div class="box-hdr">🧠 Ciekawostki</div>
+      <div class="ciekawostka-item">
+          <span class="ciek-num">#01</span>
+          <p><strong>Lamine Yamal urodził się 13 lipca 2007</strong> — dokładnie w dniu finału Mundialu, kiedy Iniesta świętował złoto. 17 lat później Yamal wygrał EURO 2024 z tą samą reprezentacją. Scenarzysta piłki nożnej ma niesamowite poczucie humoru.</p>
+        </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#02</span>
+          <p><strong>Zinedine Zidane</strong> zakończył karierę główką w Materazziego w finale MŚ 2006. Ten sam Zidane zdobył dwa gole głową w finale MŚ 1998. Symetria doskonała — nikt jej nie zaplanował, ale wszyscy pamiętają.</p>
+        </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#03</span>
+          <p><strong>Lech Poznań w 1992 roku</strong> dotarł do ćwierćfinału Ligi Mistrzów i grał z Barceloną Johana Cruyffa — Dreamteamem z Guardiolą, Stoichkovem i Laudrupem. Przegrali 1-3 i 0-4, ale historia jest legendarna. Polska liga miała swój moment.</p>
+        </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#04</span>
+          <p><strong>Ronald Koeman</strong> strzelił ponad 80 goli z rzutów wolnych przez całą karierę. Był obrońcą. Większość napastników mogłaby mu pozazdrościć skuteczności.</p>
+        </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#05</span>
+          <p><strong>FC Barcelona przez ponad 100 lat</strong> (1899–2006) grała bez żadnego sponsora na koszulce. Potem wzięła kasę od Qatar Foundation i wszystko się zmieniło. Przynajmniej byli ostatni z wielkich, którzy to zrobili.</p>
+        </div>
+
+    </div>
+
+    <div class="box" id="radar">
+      <div class="box-hdr" style="background:#00356A;">🔴🔵 FC Barcelona Radar</div>
+      <div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://www.sofascore.com/team/football/fc-barcelona/2817" target="_blank">Wyniki i tabela La Liga</a><br>
+          <span class="r-desc">Sofascore — aktualne statystyki, tabela, terminarz FC Barcelona</span></div>
+        </div>
+<div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://www.transfermarkt.pl/lamine-yamal/profil/spieler/983709" target="_blank">Lamine Yamal</a><br>
+          <span class="r-desc">Transfermarkt — profil, wycena, historia transferów</span></div>
+        </div>
+<div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://fbref.com/en/squads/206d90db/FC-Barcelona-Stats" target="_blank">Statystyki zaawansowane</a><br>
+          <span class="r-desc">FBref — xG, pressing, posiadanie — Barca pod lupą</span></div>
+        </div>
+
+    </div>
+
+    <div class="box">
+      <div class="box-hdr" style="background:#38003c;">🟣 Premier League Radar</div>
+      <div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://www.sofascore.com/tournament/football/england/premier-league/17#tab:standings" target="_blank">Tabela Premier League</a><br>
+          <span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy</span></div>
+        </div>
+<div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Statystyki ligowe</a><br>
+          <span class="r-desc">FBref — zaawansowane statystyki wszystkich drużyn PL</span></div>
+        </div>
+<div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://www.transfermarkt.pl/premier-league/startseite/wettbewerb/GB1" target="_blank">Transfery i wyceny</a><br>
+          <span class="r-desc">Transfermarkt — wartości rynkowe zawodników Premier League</span></div>
+        </div>
+
+    </div>
+
+    <div class="box">
+      <div class="box-hdr" style="background:#8B0000;">🟡 La Liga Radar</div>
+      <div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://www.sofascore.com/tournament/football/spain/laliga/8#tab:standings" target="_blank">Tabela La Liga</a><br>
+          <span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy La Liga</span></div>
+        </div>
+<div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Statystyki ligowe</a><br>
+          <span class="r-desc">FBref — zaawansowane statystyki La Liga</span></div>
+        </div>
+<div class="radar-item">
+          <span class="r-bullet">★</span>
+          <div><a href="https://www.transfermarkt.pl/primera-division/startseite/wettbewerb/ES1" target="_blank">Transfery i wyceny</a><br>
+          <span class="r-desc">Transfermarkt — wartości rynkowe zawodników La Liga</span></div>
+        </div>
+
+    </div>
+
+    <div class="box">
+      <div class="box-hdr">🔗 Szybkie Linki</div>
+      <div class="quick-link"><span>Wyniki na żywo</span><a href="https://www.flashscore.pl" target="_blank">Flashscore →</a></div>
+      <div class="quick-link"><span>Statystyki zaawansowane</span><a href="https://fbref.com" target="_blank">FBref →</a></div>
+      <div class="quick-link"><span>Wyceny zawodników</span><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt →</a></div>
+      <div class="quick-link"><span>Sofascore</span><a href="https://www.sofascore.com" target="_blank">Sofascore →</a></div>
+      <div class="quick-link"><span>Oficjalna UCL</span><a href="https://www.uefa.com" target="_blank">UEFA →</a></div>
+    </div>
+
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  ★ DOBITKA — agregator sportowy dla kibiców bez czasu na chaos ★<br><br>
+  Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a> (CC BY 4.0) &nbsp;|&nbsp;
+  Linki prowadzą do oryginalnych źródeł. Opisy redakcji własne.<br>
+  Zero trackerów. Zero reklam.
+</footer>
+
+<script>
+function showTab(code) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  var pane = document.getElementById('tab-' + code);
+  if (pane) pane.classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.getAttribute('onclick').includes(code)) b.classList.add('active');
+  });
+}
+// Aktywuj pierwszy tab domyślnie
+window.onload = function() {
+  var first = document.querySelector('.tab-pane');
+  if (first) first.classList.add('active');
+};
+</script>
+</body>
+</html>
