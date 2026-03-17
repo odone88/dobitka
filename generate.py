@@ -1620,6 +1620,13 @@ def generate():
             'upcoming': upcoming,
         }
 
+    # Understat xG — pobierz przed budowaniem tabel (uzywane w standings_sections)
+    print('  Understat xG (5 lig)...')
+    xg_data = {}
+    for code, name, fallback in LEAGUES:
+        if code in UNDERSTAT_LEAGUES:
+            xg_data[code] = xg_table_html(code, fallback)
+
     # Buduj sekcje zakładek ligowych
     tab_btns = ''
     for i, (code, name, _) in enumerate(LEAGUES):
@@ -1666,12 +1673,6 @@ def generate():
 
     print('  Tifo Football YouTube RSS...')
     tifo_html = tifo_videos_html(max_items=4)
-
-    print('  Understat xG (5 lig)...')
-    xg_data = {}
-    for code, name, fallback in LEAGUES:
-        if code in UNDERSTAT_LEAGUES:
-            xg_data[code] = xg_table_html(code, fallback)
 
     previews_block = ''
     if previews_sec:
