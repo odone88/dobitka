@@ -451,6 +451,117 @@ footer {
 footer a { color: #444; }
 footer a:hover { color: var(--gold); }
 
+/* ── EDITORIAL SECTION ── */
+.editorial-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.editorial-match {
+  background: var(--panel);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 16px;
+  border-top: 3px solid var(--gold);
+}
+.em-comp {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+.em-scoreline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.em-team {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ddd;
+}
+.em-home { text-align: right; }
+.em-away { text-align: left; }
+.em-score {
+  font-family: 'Courier New', monospace;
+  font-size: 28px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 4px;
+  min-width: 70px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.em-score.win-h { color: var(--green); background: rgba(0,187,68,0.12); }
+.em-score.win-a { color: #ff6644; background: rgba(255,102,68,0.12); }
+.em-score.draw  { color: #ccc; background: rgba(255,255,255,0.07); }
+.em-comment {
+  font-size: 13px;
+  color: #bbb;
+  line-height: 1.7;
+  font-style: italic;
+  border-left: 2px solid var(--gold);
+  padding-left: 10px;
+}
+
+/* ── DAILY FACTS ── */
+.facts-strip {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.fact-card {
+  background: var(--panel);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.fact-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+.fact-text {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.6;
+}
+.fact-text strong { color: #ddd; }
+
+/* ── SECTION LABELS ── */
+.section-label {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--bdr);
+}
+
 /* ── REDDIT POSTY ── */
 .reddit-post { padding: 10px 14px; border-bottom: 1px solid var(--bdr); transition: background 0.1s; }
 .reddit-post:last-child { border-bottom: none; }
@@ -495,6 +606,8 @@ footer a:hover { color: var(--gold); }
 @media (max-width: 900px) {
   .topbar-wrap { grid-template-columns: 1fr 1fr; }
   .container   { grid-template-columns: 1fr; }
+  .editorial-wrap { grid-template-columns: 1fr; }
+  .facts-strip { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
   .topbar-wrap { grid-template-columns: 1fr; }
@@ -503,6 +616,7 @@ footer a:hover { color: var(--gold); }
   .tab-btn { font-size: 10px; padding: 7px 8px; }
   .scorer-row { grid-template-columns: 20px 1fr 32px; }
   .sc-team, .sc-assists { display: none; }
+  .facts-strip { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -520,7 +634,7 @@ footer a:hover { color: var(--gold); }
 <header>
   <div class="logo">&#9917; DOBITKA</div>
   <div class="tagline">// Pilka. Sport. Bez sciemy. //</div>
-  <div class="updated">Ostatnia aktualizacja: <span>17.03.2026 20:57</span> &nbsp;|&nbsp;
+  <div class="updated">Ostatnia aktualizacja: <span>17.03.2026 21:28</span> &nbsp;|&nbsp;
     Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a>
     &nbsp;+&nbsp; <a href="https://www.thesportsdb.com" target="_blank">TheSportsDB</a>
   </div>
@@ -528,11 +642,10 @@ footer a:hover { color: var(--gold); }
 
 <nav>
   <a href="#live">&#128308; Live</a>
+  <a href="#editorial">&#9997; Wczoraj</a>
   <a href="#dzisiaj">&#9654; Dzisiaj</a>
-  <a href="#linki">&#128293; Linki</a>
   <a href="#tabele">&#128202; Tabele</a>
   <a href="#ciekawostki">&#129504; Ciekawostki</a>
-  <a href="#radar">&#128301; Radar</a>
   <a href="https://www.flashscore.pl" target="_blank">&#9889; Flashscore</a>
 </nav>
 
@@ -573,6 +686,14 @@ footer a:hover { color: var(--gold); }
 </div>
 
 
+
+
+
+<div class="section-label">&#128161; FAKT DNIA &mdash; 17.03.2026</div>
+<div class="facts-strip"><div class="fact-card"><span class="fact-icon">&#128161;</span><p class="fact-text"><strong>Ryan Giggs</strong> rozegral 963 mecze dla Man United. To wiecej niz niektorzy pilkarze rozegrali treningow. Fergusona nie bylo kto zapytac co bedzie teraz.</p></div>
+<div class="fact-card"><span class="fact-icon">&#128200;</span><p class="fact-text"><strong>Carlo Ancelotti</strong> jest jedynym trenerem, ktory wygral Ligi Mistrzow z trzema roznymi klubami — Milan (x2), Real Madryt (x3), i znowu Real. Niema, spokojny i najskuteczniejszy.</p></div>
+<div class="fact-card"><span class="fact-icon">&#9733;</span><p class="fact-text"><strong>Sam Kerr</strong> z Chelsea Women jest jedna z najlepiej oplacanych pilikarek na swiecie i ma na koncie hat-tricki w 4 roznych ligach. Mowi ze pilka nozna to nie gender, to umiejetnosc.</p></div>
+</div>
 
 <div class="container">
 
@@ -630,42 +751,19 @@ footer a:hover { color: var(--gold); }
 </table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Kylian Mbappé</span><span class="sc-team">Real Madrid</span><span class="sc-goals">13</span><span class="sc-assists">+1a</span></div>
 <div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Anthony Gordon</span><span class="sc-team">Newcastle</span><span class="sc-goals">10</span><span class="sc-assists">+2a</span></div>
 <div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Harry Kane</span><span class="sc-team">Bayern</span><span class="sc-goals">8</span><span class="sc-assists">+0a</span></div>
-<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Erling Haaland</span><span class="sc-team">Man City</span><span class="sc-goals">7</span><span class="sc-assists">+0a</span></div>
-<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Victor Osimhen</span><span class="sc-team">Galatasaray</span><span class="sc-goals">7</span><span class="sc-assists">+2a</span></div>
-<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Julián Álvarez</span><span class="sc-team">Atleti</span><span class="sc-goals">7</span><span class="sc-assists">+2a</span></div>
-<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Martinelli</span><span class="sc-team">Arsenal</span><span class="sc-goals">6</span><span class="sc-assists">+1a</span></div>
-<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Khvicha Kvaratskhelia</span><span class="sc-team">PSG</span><span class="sc-goals">6</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Khvicha Kvaratskhelia</span><span class="sc-team">PSG</span><span class="sc-goals">7</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Erling Haaland</span><span class="sc-team">Man City</span><span class="sc-goals">7</span><span class="sc-assists">+0a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Victor Osimhen</span><span class="sc-team">Galatasaray</span><span class="sc-goals">7</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Julián Álvarez</span><span class="sc-team">Atleti</span><span class="sc-goals">7</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Martinelli</span><span class="sc-team">Arsenal</span><span class="sc-goals">6</span><span class="sc-assists">+1a</span></div>
 </div><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Real Madrid</span><span class="r-score win-h">2:1</span><span class="r-away">Marseille</span></div>
 <div class="result-row"><span class="r-home">Tottenham</span><span class="r-score win-h">1:0</span><span class="r-away">Villarreal</span></div>
 <div class="result-row"><span class="r-home">SL Benfica</span><span class="r-score win-a">2:3</span><span class="r-away">Qarabağ Ağdam</span></div>
 <div class="result-row"><span class="r-home">Juventus</span><span class="r-score draw">4:4</span><span class="r-away">Dortmund</span></div>
 <div class="result-row"><span class="r-home">PSV</span><span class="r-score win-a">1:3</span><span class="r-away">Union SG</span></div>
 <div class="result-row"><span class="r-home">Athletic</span><span class="r-score win-a">0:2</span><span class="r-away">Arsenal</span></div>
-<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">Chelsea</span><span class="u-vs">vs</span><span class="u-away">PSG</span><span class="u-time">17.03 21:00</span></div>
-<div class="upcoming-row"><span class="u-home">Man City</span><span class="u-vs">vs</span><span class="u-away">Real Madrid</span><span class="u-time">17.03 21:00</span></div>
-<div class="upcoming-row"><span class="u-home">Arsenal</span><span class="u-vs">vs</span><span class="u-away">Leverkusen</span><span class="u-time">17.03 21:00</span></div>
-<div class="upcoming-row"><span class="u-home">Barça</span><span class="u-vs">vs</span><span class="u-away">Newcastle</span><span class="u-time">18.03 18:45</span></div>
-<div class="upcoming-row"><span class="u-home">Liverpool</span><span class="u-vs">vs</span><span class="u-away">Galatasaray</span><span class="u-time">18.03 21:00</span></div>
-</div>
-<div class="tab-pane" id="tab-PL"><div class="tab-league-title">Premier League</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">Arsenal</td><td class="s-num">31</td><td class="s-num">21</td><td class="s-num">7</td><td class="s-num">3</td><td class="s-num s-gd">+39</td><td class="s-pts">70</td></tr>
-<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">Man City</td><td class="s-num">30</td><td class="s-num">18</td><td class="s-num">7</td><td class="s-num">5</td><td class="s-num s-gd">+32</td><td class="s-pts">61</td></tr>
-<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Man United</td><td class="s-num">30</td><td class="s-num">15</td><td class="s-num">9</td><td class="s-num">6</td><td class="s-num s-gd">+13</td><td class="s-pts">54</td></tr>
-<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Aston Villa</td><td class="s-num">30</td><td class="s-num">15</td><td class="s-num">6</td><td class="s-num">9</td><td class="s-num s-gd">+3</td><td class="s-pts">51</td></tr>
-<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">Liverpool</td><td class="s-num">30</td><td class="s-num">14</td><td class="s-num">7</td><td class="s-num">9</td><td class="s-num s-gd">+9</td><td class="s-pts">49</td></tr>
-<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Chelsea</td><td class="s-num">30</td><td class="s-num">13</td><td class="s-num">9</td><td class="s-num">8</td><td class="s-num s-gd">+18</td><td class="s-pts">48</td></tr>
-<tr ><td class="s-pos">7</td><td class="s-team">Brentford</td><td class="s-num">30</td><td class="s-num">13</td><td class="s-num">6</td><td class="s-num">11</td><td class="s-num s-gd">+4</td><td class="s-pts">45</td></tr>
-<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Everton</td><td class="s-num">30</td><td class="s-num">12</td><td class="s-num">7</td><td class="s-num">11</td><td class="s-num s-gd">-1</td><td class="s-pts">43</td></tr>
-<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Newcastle</td><td class="s-num">30</td><td class="s-num">12</td><td class="s-num">6</td><td class="s-num">12</td><td class="s-num s-gd">0</td><td class="s-pts">42</td></tr>
-<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Bournemouth</td><td class="s-num">30</td><td class="s-num">9</td><td class="s-num">14</td><td class="s-num">7</td><td class="s-num s-gd">-2</td><td class="s-pts">41</td></tr>
-</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Erling Haaland</span><span class="sc-team">Man City</span><span class="sc-goals">22</span><span class="sc-assists">+7a</span></div>
-<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Thiago Rodrigues</span><span class="sc-team">Brentford</span><span class="sc-goals">19</span><span class="sc-assists">+1a</span></div>
-<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Antoine Semenyo</span><span class="sc-team">Man City</span><span class="sc-goals">15</span><span class="sc-assists">+4a</span></div>
-<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">João Pedro</span><span class="sc-team">Chelsea</span><span class="sc-goals">14</span><span class="sc-assists">+5a</span></div>
-<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Hugo Ekitike</span><span class="sc-team">Liverpool</span><span class="sc-goals">11</span><span class="sc-assists">+4a</span></div>
-<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Viktor Gyökeres</span><span class="sc-team">Arsenal</span><span class="sc-goals">11</span><span class="sc-assists">+0a</span></div>
-<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Dominic Calvert-Lewin</span><span class="sc-team">Leeds United</span><span class="sc-goals">10</span><span class="sc-assists">+1a</span></div>
-<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Danny Welbeck</span><span class="sc-team">Brighton Hove</span><span class="sc-goals">10</span><span class="sc-assists">+0a</span></div>
-</div><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Wolverhampton</span><span class="r-score win-a">0:4</span><span class="r-away">Man City</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><p class="no-data">Brak terminarza — <a href="https://www.sofascore.com/tournament/football/europe/uefa-champions-league/7" target="_blank">Sofascore &#8594;</a></p></div>
+<div class="tab-pane" id="tab-PL"><div class="tab-league-title">Premier League</div><p class="no-data">Brak danych — <a href="https://www.sofascore.com/tournament/football/england/premier-league/17" target="_blank">Sofascore &#8594;</a></p><div class="subsection-title">&#9917; Top Strzelcy</div><p class="no-data">Brak strzelcow — <a href="https://www.sofascore.com/tournament/football/england/premier-league/17" target="_blank">Sofascore &#8594;</a></p><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Wolverhampton</span><span class="r-score win-a">0:4</span><span class="r-away">Man City</span></div>
 <div class="result-row"><span class="r-home">Tottenham</span><span class="r-score win-h">3:0</span><span class="r-away">Burnley</span></div>
 <div class="result-row"><span class="r-home">Sunderland</span><span class="r-score win-h">3:0</span><span class="r-away">West Ham</span></div>
 <div class="result-row"><span class="r-home">Brighton Hove</span><span class="r-score draw">1:1</span><span class="r-away">Fulham</span></div>
@@ -835,12 +933,12 @@ footer a:hover { color: var(--gold); }
     <!-- Weszlo.com — polska pilka -->
     <div class="box">
       <div class="box-hdr" style="background:#003010;">&#127477;&#127473; Weszlo.com <span class="sub">polska pilka</span></div>
-      <div class="news-item"><div class="news-cat">Mistrzostwa Świata 2026</div><div class="news-title"><a href="https://weszlo.com/bez-precedensu-meksyk-gotowy-na-przyjecie-iranu-w-trakcie-ms-2026" target="_blank" rel="noopener">Bez precedensu! Meksyk gotowy na przyjęcie Iranu podczas MŚ 2026</a></div><div class="news-date">17.03</div></div>
+      <div class="news-item"><div class="news-cat">Inne ligi zagraniczne</div><div class="news-title"><a href="https://weszlo.com/media-jagiellonia-moze-zgarnac-bonusy-pietuszewski-blyszczy-w-porto" target="_blank" rel="noopener">Media: Pietuszewski błyszczy w Porto, Jagiellonia może zgarnąć bonusy</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Ekstraklasa</div><div class="news-title"><a href="https://weszlo.com/jagiellonia-bialystok-gks-katowice-2-1-w-koncu-lepszy-mecz-jagi" target="_blank" rel="noopener">Uff, kamień z serca spadł w Białymstoku. Jaga jeszcze gra w piłkę</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Mistrzostwa Świata 2026</div><div class="news-title"><a href="https://weszlo.com/bez-precedensu-meksyk-gotowy-na-przyjecie-iranu-w-trakcie-ms-2026" target="_blank" rel="noopener">Bez precedensu! Meksyk gotowy na przyjęcie Iranu podczas MŚ 2026</a></div><div class="news-date">17.03</div></div>
 <div class="news-item"><div class="news-cat">Ekstraklasa</div><div class="news-title"><a href="https://weszlo.com/zaskakujacy-pomysl-wichniarka-widzi-w-kadrze-napastnika-legii" target="_blank" rel="noopener">Szokujący pomysł Wichniarka! Widzi w kadrze napastnika Legii</a></div><div class="news-date">17.03</div></div>
 <div class="news-item"><div class="news-cat">Inne ligi zagraniczne</div><div class="news-title"><a href="https://weszlo.com/quincy-promes-przyznal-sie-do-zarzucanego-mu-czynu" target="_blank" rel="noopener">Promes przerwał milczenie i przyznał się do popełnienia jednego z czynów</a></div><div class="news-date">17.03</div></div>
 <div class="news-item"><div class="news-cat">Piłka nożna</div><div class="news-title"><a href="https://weszlo.com/problemy-ze-skladem-jest-swiatelko-w-tunelu-dla-reprezentacji-polski" target="_blank" rel="noopener">Problemy kadrowe? Jest światełko w tunelu dla reprezentacji Polski</a></div><div class="news-date">17.03</div></div>
-<div class="news-item"><div class="news-cat">Inne ligi zagraniczne</div><div class="news-title"><a href="https://weszlo.com/tajemniczy-zbychpol-w-azji-niezwykly-obraz-mongolskiej-pilki" target="_blank" rel="noopener">Zbychpol na rynku mongolskim, czyli niezwykły obraz tamtejszej piłki</a></div><div class="news-date">17.03</div></div>
-<div class="news-item"><div class="news-cat">Polecane</div><div class="news-title"><a href="https://weszlo.com/wujek-sebek-w-najslabszym-spoiwie-co-wie-o-pilce-14-odcinek" target="_blank" rel="noopener">Wujek Sebek w Najsłabszym Spoiwie! Co wie o piłce? | 14. ODCINEK</a></div><div class="news-date">17.03</div></div>
 
       <div style="text-align:right;padding:6px 14px;font-size:11px;color:var(--muted);">
         <a href="https://weszlo.com" target="_blank">weszlo.com &#8594;</a>
@@ -936,6 +1034,7 @@ footer a:hover { color: var(--gold); }
   &nbsp;|&nbsp; <a href="https://understat.com" target="_blank">Understat</a> (xG)
   &nbsp;|&nbsp; <a href="https://reddit.com/r/soccer" target="_blank">Reddit</a>
   &nbsp;|&nbsp; <a href="https://weszlo.com" target="_blank">Weszlo.com</a>
+  &nbsp;|&nbsp; <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a>
   &nbsp;|&nbsp;
   Linki prowadza do oryginalnych zrodel. Opisy redakcji wlasne.<br>
   Zero trackerow. Zero reklam.
