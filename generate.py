@@ -256,6 +256,117 @@ TEAM_VIBES = {
     'Cracovia':   'Pasy Krakow — derby przy Reymonta zawsze grzeje krew',
 }
 
+# ─── BAZA FAKTOW — rotacja dzienna (day_of_year % len = 3 na dzien) ──────────
+# ~90 faktow, wybieramy 3 dziennie na podstawie dnia roku
+FACTS_DB = [
+    # --- STATYSTYCZNE / HISTORYCZNE ---
+    '<strong>Erling Haaland</strong> w sezonie 2022/23 strzeli 52 gole dla Man City — to wiecej niz 11 klubow Premier League w tamtym sezonie. Razem wziete.',
+    '<strong>Cristiano Ronaldo</strong> jest jedynym pilkarzem, ktory strzeli w finalach Ligi Mistrzow dla dwoch roznych klubow — Manchesteru United (2008) i Realu Madryt (2017).',
+    '<strong>Lionel Messi</strong> strzeli 91 goli w 2012 roku kalendarzowym. Kolejny w rankingu — Muller w 1972 — mial 85. Messi pobil rekord i sam nie pamietail kiedy.',
+    '<strong>Real Madryt</strong> wygral Ligi Mistrzow 15 razy — wiecej niz jakakolwiek inna druzyna. Drugi jest AC Milan z 7. To nie konkurs, to monopol.',
+    '<strong>Pele</strong> strzeli 1283 gole w oficjalnych meczach wedlug RSSSF. Purysci spieraja sie o liczbe, ale zgadzaja sie jedno: byl nieludzki.',
+    '<strong>Lamine Yamal</strong> zostal najmlodszym strzelcem w historii EURO — 16 lat i 362 dni. Strzeli polfinale z Francja. Gronkowi Bale bylo dwa razy tyle.',
+    '<strong>Arsenal</strong> nie przegral zadnego meczu ligowego przez caly sezon 2003/04. 38 meczy, 26 wygranych, 12 remisow. "The Invincibles" — i na zawsze beda.',
+    '<strong>Leicester City</strong> wygral Premier League w 2015/16 z kursem bukmacherskim 5000:1. Wiekszosc bukmacherow dawala wyzsze szanse na znalezienie Yeti.',
+    '<strong>Bayern Monachium</strong> wygral Bundesligi 32 razy, w tym 11 z rzedu (2013-2023). To nie liga, to liga jednej druzyny z figurantami.',
+    '<strong>Zinedine Zidane</strong> jako trener prowadzil Real Madryt do trzech z rzedu trofeow UCL (2016-2018). Wiekszosc trenerow cieszy sie z jednego. Zizou wzruszyl ramionami.',
+    # --- CIEKAWOSTKI / DZIWNE FAKTY ---
+    '<strong>Goalkeeperi strzelaja tez gole</strong> — Asmir Begovic strzeli z wynosu w 2013 r. dla Stoke. 97,6 metra — rekord Premier League. Bramkarze sa bardziej ambitni niz sie wydaje.',
+    '<strong>Pilka meczowa w finale MS 2022</strong> wazyla 440 gramow i miala 20 paneli. Messi dostal ja do domu. Nikt sie nie spieral.',
+    'Na <strong>MS 1950</strong> India wycofala sie z turnieju ponoc bo FIFA nie pozwolila im grac boso. Oficjalnie "problemy logistyczne". Nieoficjalnie — pilka w sandalach to inna gra.',
+    '<strong>Gol samobojczy</strong> w Premier League trafi sie statystycznie co ok. 10 meczy. Bramkarzowi Chelsea Frank de Boer strzeli brata — a nie gral nawet w Chelsea.',
+    'W <strong>1969 roku</strong> Honduras i Salwador wygraly "wojne futbolowa" — trzy mecze eliminacyjne MS doprowadziły do prawdziwego konfliktu zbrojnego. Pilka laczy narody, czasem troche za mocno.',
+    '<strong>Stadion Nou Camp</strong> (teraz Estadi Olimpic) miesci 99 354 osoby. Rekord frekwencji — 120 000 na mecz Barcelony z Eintrachtem Frankfurt w 1960.',
+    '<strong>Pierwsza transmisja telewizyjna meczu pilkarskiego</strong> to Niemcy, 1936 rok, olimpiada. Kamera byla jedna, ujec mniej niz w typowej relacji z chrzcin. I tak bylo lepiej niz VAR.',
+    '<strong>Najwyzej punktowany mecz</strong> w historii pilki to 149:0 — Madagascar, 2002. Druzyna zaczela strzelac gole samobojcze na protest wobec sedziowskich decyzji. Sedziowie potem nie sedzili.',
+    '<strong>Ryan Giggs</strong> rozegral 963 mecze dla Man United. To wiecej niz niektorzy pilkarze rozegrali treningow. Fergusona nie bylo kto zapytac co bedzie teraz.',
+    '<strong>Andres Iniesta</strong> nie dostal Zlotej Pilki w 2010 roku mimo ze strzeli gola w finale MS. Dostal ja Messi. Iniesta sie nie skarzyl. To tez mowi cos o Iniestcie.',
+    # --- POLSKIE / EUROPEJSKIE ---
+    '<strong>Robert Lewandowski</strong> jest jedynym Polakiem, ktory wygral Bundesligi, La Ligi i Ligi Mistrzow. I jedynym, ktory powinien byl dostac Zlota Pilke w 2020 — zanim COVID skasowal plebiscyt.',
+    '<strong>Kazimierz Deyna</strong> kapitan kadry z 1974 i 1978, kiedys uznany za jednego z najlepszych pomocnikow swiata. Dzisiaj mlodziez go nie zna. Polska ma problem z pamiecia.',
+    '<strong>Zbigniew Boniek</strong> jest jedynym Polakiem z gola w fazie pucharowej Ligi Mistrzow (puchar UEFA) w latach 80. Zlaczyl sie z Juventusem i wygralem Puchar Europy. Tak sie robi kariere.',
+    '<strong>Lech Poznan</strong> jako jedyna polska druzyna dotarl do cwierfinalu Ligi Mistrzow (1992). Stracili z Barca 1:3 i 0:4. Ale tam byli.',
+    '<strong>Reprezentacja Polski</strong> wygrala olimpiajde w 1972 roku, bijac Wegierkow w finale. Zlociki z futbolu, kto by pomyslal. Dzisiaj mlodziez nie wygrala nic, ale pamietamy.',
+    # --- BARCA / CHELSEA SPECIALS ---
+    '<strong>FC Barcelona</strong> to jeden z niewielu klubow sportowych na swiecie nalezacych do kibicow (socis). 140 000+ czlonkow ma prawo glosowania. Demokracja przez futbol.',
+    '<strong>Frank Lampard</strong> strzeli 211 goli dla Chelsea — rekord. Srodkowy pomocnik. Napastnicy Chelsea od lat proba pobic ten wynik i sie poddaja po jednym sezonie.',
+    '<strong>Didier Drogba</strong> strzeli gola wyrownujacego w 88. minucie finalu UCL 2012 w Monachium. Bayern sie juz cieszylo. Drogba mial inne plany. Chelsea wygrala na karnych.',
+    '<strong>Barca wygrala La Ligi</strong> 27 razy i 5 razy Ligi Mistrzow. Ale jedyny sezon kiedy wygrali Puchar Krolow Anglii to nigdy — bo sie nie lapali na eliminacje. Proste.',
+    '<strong>Xavi rozegral</strong> 505 meczy La Ligi dla Barcelony. To ile mecze gra Premier League przez 13 sezonow. Xavi rozegral je WSZYSTKIE dla jednego klubu.',
+    # --- UCL / PUCHARY ---
+    '<strong>Real Madryt</strong> stracil prowadzenie w stanie gry w 15 finalach UCL i przegral tylko jeden. Resilience czy szczesciarze? Ancelotti mowi nie ma takiego slowa.',
+    '<strong>Manchester United</strong> wygral UCL 1999 po tym jak dwie minuty przed koncem przegrywal. Sheringham i Solskjaer w 91. i 93. Minuty. Fergie nie zmrowil oka — dostal zawal za to co bylo dalej.',
+    '<strong>AC Milan i Liverpool</strong> zagrali w finale UCL 2005 w Stambule. Milan prowadzil 3:0 po pierwszej polowie. Liverpool wyrownali i wygrali na karnych. Wciaz nie wiadomo jak.',
+    '<strong>Atletico Madryt</strong> dotarlo do dwoch finalow UCL (2014, 2016) i przegralo oba z Realem. Drugi raz z kola, z rzutu karnego w doliczonym czasie. Simeone nasluchal sie psikusow losu.',
+    '<strong>Borussia Dortmund</strong> dotarla do finalu UCL 2013 w Wembley i przegrala z Bayernem 1:2. Dwa kluby z Niemiec. Finall 100% made in Germany. BVB wrocila... zeby znow przegrac innym razem.',
+    # --- TRENERZY / MENEDZEROWIE ---
+    '<strong>Sir Alex Ferguson</strong> prowadzil Manchester United przez 26 lat i wygral 38 trofeow. Nastepny trener — David Moyes — zwolniony po 10 miesiacach. Fergie mial pamietac zeby wynajac kogos lepszego.',
+    '<strong>Pep Guardiola</strong> wygral ligi mistrzow z trzema roznymi klubami — Barca, Bayern i City. Chyba jedyny trener w historii z tak roznorodnymi osiagnięciami w topowych ligach.',
+    '<strong>Carlo Ancelotti</strong> jest jedynym trenerem, ktory wygral Ligi Mistrzow z trzema roznymi klubami — Milan (x2), Real Madryt (x3), i znowu Real. Niema, spokojny i najskuteczniejszy.',
+    '<strong>Jose Mourinho</strong> zwanym "The Special One" wygral UCL z dwoma roznymi klubami (Porto 2004, Inter 2010). Potem przez kilkanascie lat walczyl o kolejne. Wciaz czeka.',
+    '<strong>Jurgen Klopp</strong> odszedl z Liverpoolu po wygraniu wszystkiego co bylo do wygrania. Premier League, UCL, FA Cup, League Cup, Club World Cup. Powiedzial ze "nie ma wiecej energii". Kibice Liverpoolu rozumieja.',
+    # --- REKORDY / LICZBY ---
+    '<strong>Cristiano Ronaldo</strong> ma ponad 600 milionow followersow na Instagramie. To wiecej niz populacja calej Europy Zachodniej. Social media nie bylo przewidziane na tego czlowieka.',
+    '<strong>Kylian Mbappe</strong> zostal mistrzem swiata w 2018 w wieku 19 lat i 183 dni. Drugi tak mlody zawodnik to Pele z 1958 roku — 17 lat. Obaj odroznili sie od reszty swiata.',
+    '<strong>Gareth Bale</strong> strzeli gola w finale UCL 2018 z woleja, ktora jest uznana za jeden z najlepszych goli w historii rozgrywek. Strzeli tez inny gol. Potem pojechal grac w golfa.',
+    '<strong>Thierry Henry</strong> jest rekordzista Arsenal pod wzgledem goli — 228. Co ciekawe, Henry tez "pomagal" Francji dojsc do MS 2010 reka w elimach z Irlandia. Pamietamy.',
+    '<strong>Neymar</strong> kosztowal Barcelona 57 milionow euro w 2013. Trzy lata pozniej PSG zaplacilo 222 miliony. Inflacja pilkarska jest bardziej agresywna niz normalna.',
+    '<strong>Virgil van Dijk</strong> nie przegral praktycznie zadnego meczu 1v1 przez caly sezon Premier League 2018/19. Liverpool stracil tylko 22 gole w 38 meczach. Solidny Holender to dobre inwestowanie.',
+    # --- MNIEJ ZNANE CIEKAWOSTKI ---
+    '<strong>Pierwsza Zlota Pilka</strong> zostala przyznana w 1956 roku. Dostal ja Stanley Matthews — legalnie, bo nie bylo VAR-u. Rok wczesniej mialbys kontrowersje. Rok pozniej tez.',
+    'Mecze <strong>Premier League</strong> sa transmitowane w ponad 200 krajach na calym swiecie. Kazdy mecz — nawet Burnley vs Wolves w srodku sezonu. Ktos to ogladada i jest z tego dumny.',
+    '<strong>Diego Maradona</strong> strzeli Gola Stulecia w 1986 przeciwko Anglii — 60 metrow z dryblingiem przez pol druzyny. Potem strzeli reka i powiedzial ze to "reka Boga". Argentynczycy klaskali za oba.',
+    '<strong>Grzegorz Lato</strong> zostal krolem strzelcow MS 1974 z 7 golami. Polska zagrala rowniez mecz z RFN ktory de facto zadecydowal o finale. Wynik 0:1, Polska zajela 3 miejsce. Nadal najlepszy wynik w historii.',
+    '<strong>Wegry</strong> byly uwazane za najlepsza druzyne swiata w 1954 roku — Zlote Druzyne Ferenca Puskasa. Przegrali finale MS z RFN 2:3 po prowadzeniu 2:0. Historia zapisala to jako "Cud w Bernie".',
+    '<strong>Najszybszy gol w historii Premier League</strong> — Shane Long w 7.69 sekundy dla Southampton w 2019. 6 akcji, jeden strzal, zero szczescia dla Watfordu.',
+    '<strong>Wayne Rooney</strong> strzeli swoj pierwszy gol dla Man United majac 18 lat — hat-trick w debiu w UCL z Fenerbahce. Ferguson wiedzial ze to bedzie wyjatkowy.',
+    '<strong>La Liga</strong> jest jedyna liga top-5, ktora nigdy nie miala mistrza z poza Barcelony i Realu Madryt... poza Atletico (2014, 2021) i kilkoma innymi. Iberyjski duopol ma wyjatki.',
+    '<strong>Peter Crouch</strong> strzeli 22 golami glowa w Premier League — wiecej niz wielu pilkarzy strzeli lacznie. Mierzyl 2.01m i byl mistrzem robotics dance. Jedyny w swoim rodzaju.',
+    '<strong>Jurgen Klopp</strong> wygrawal 100 meczy w Premier League szybciej niz jakikolwiek inny trener. Zrobil to w 171 meczach — Pep potrzebowal 177.',
+    '<strong>Sam Kerr</strong> z Chelsea Women jest jedna z najlepiej oplacanych pilikarek na swiecie i ma na koncie hat-tricki w 4 roznych ligach. Mowi ze pilka nozna to nie gender, to umiejetnosc.',
+    '<strong>Christiano Ronaldo</strong> stoi na lawce rezerwowych i sprawdza Instagram jesli nie gra. Neymar robi to samo. Mamy tez zawodnikow ktorzy zasluguja na wiecej czasu na boisku.',
+]
+
+# ─── STYL KOMENTARZY MECZOWYCH ────────────────────────────────────────────────
+COMMENTARY_VIBES_SHORT = {
+    'Chelsea':   'moj Blues',
+    'Barcelona': 'Barca',
+    'Real Madrid': 'Los Blancos',
+    'Man City':  'City',
+    'Arsenal':   'Gooners',
+    'Liverpool': 'The Reds',
+    'Man United': 'Czerwone Diably',
+    'Tottenham': 'Spurs',
+    'Bayern':    'Bayern',
+    'Dortmund':  'BVB',
+    'Atletico':  'Atletico',
+    'Juventus':  'Stara Dama',
+    'Inter':     'Nerazzurri',
+    'AC Milan':  'Milan',
+    'Napoli':    'Napoli',
+    'Paris':     'PSG',
+}
+
+COMMENTARY_OPENERS_WIN = [
+    'Trzy punkty, zero watpliwosci.',
+    'Krotko i tresciwie.',
+    'Bez niespodzianek — ci co mieli wygrac, wygrali.',
+    'Klasyka.',
+    'Wynik mowi sam za siebie.',
+]
+COMMENTARY_OPENERS_DRAW = [
+    'Punkt dla kazdego — i nikt nie jest szczesliwy.',
+    'Remis. Czyli wszyscy przegrali troche.',
+    'Sprawiedliwy wynik? Albo niesprawiedliwy dla obu stron.',
+    'Podzielili sie — jak torta w domu, w ktorym nikt nie lubil ciasta.',
+]
+COMMENTARY_OPENERS_UPSET = [
+    'CHWILECZKE.',
+    'Zatrzymajcie tabele.',
+    'Ktos sprawdzil wynik? Bo to nie moze byc prawda.',
+    'No dobra, to sie wydarzylo.',
+]
+
 # ─── TheSportsDB: 14 klubow rotowanych wg dnia miesiaca ──────────────────────
 FEATURED_TEAMS = [
     'FC Barcelona',
@@ -592,6 +703,170 @@ def xg_table_html(league_code, fallback_url):
         '<p class="xg-note">diff = PKT &minus; xPTS &nbsp;|&nbsp; + szczesciarze, &minus; pechowcy &nbsp;|&nbsp; '
         '<a href="https://understat.com" target="_blank">understat.com</a></p>'
     )
+
+
+# ─── WIKIPEDIA REST API (bez klucza) ─────────────────────────────────────────
+
+def wikipedia_summary(title_en):
+    """Pobiera pierwsze zdanie artykulu z Wikipedia REST API."""
+    try:
+        url = f'https://en.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(title_en)}'
+        r   = requests.get(url, timeout=8, headers={'User-Agent': 'dobitka-bot/2.0'})
+        if r.status_code == 200:
+            data    = r.json()
+            extract = data.get('extract', '')
+            # Pierwsze 2 zdania
+            sentences = extract.split('. ')
+            return '. '.join(sentences[:2]) + ('.' if len(sentences) > 1 else '')
+    except Exception as e:
+        print(f'  Wikipedia blad ({title_en}): {e}')
+    return None
+
+
+# ─── DZIENNE FAKTY — 3 rotowane na podstawie dnia roku ───────────────────────
+
+def daily_facts_html(day_of_year):
+    """Zwraca 3 fakty rotowane dziennie."""
+    n    = len(FACTS_DB)
+    idx1 = day_of_year % n
+    idx2 = (day_of_year + n // 3) % n
+    idx3 = (day_of_year + 2 * n // 3) % n
+    facts = [FACTS_DB[idx1], FACTS_DB[idx2], FACTS_DB[idx3]]
+    html  = ''
+    icons = ['&#128161;', '&#128200;', '&#9733;']
+    for i, fact in enumerate(facts):
+        html += (
+            f'<div class="fact-card">'
+            f'<span class="fact-icon">{icons[i]}</span>'
+            f'<p class="fact-text">{fact}</p>'
+            f'</div>\n'
+        )
+    return html
+
+
+# ─── KOMENTARZ MECZOWY — styl redakcji DOBITKA ───────────────────────────────
+
+def _short_name(team_dict):
+    return team_dict.get('shortName') or team_dict.get('name') or '?'
+
+
+def _team_tag(name):
+    """Znajdz krotki descriptor druzyny."""
+    for key, tag in COMMENTARY_VIBES_SHORT.items():
+        if key.lower() in name.lower():
+            return tag
+    return name
+
+
+def generate_match_commentary(match):
+    """
+    Generuje 3-4 zdaniowy komentarz w stylu DOBITKA dla zakonczonego meczu.
+    Ostry, dosadny, z humorem i bez butnosci.
+    """
+    import random
+    home   = _short_name(match['homeTeam'])
+    away   = _short_name(match['awayTeam'])
+    sh     = match['score']['fullTime'].get('home', 0) or 0
+    sa     = match['score']['fullTime'].get('away', 0) or 0
+    comp   = match.get('competition', {}).get('name', '')
+    h_tag  = _team_tag(home)
+    a_tag  = _team_tag(away)
+    diff   = abs(sh - sa)
+    total  = sh + sa
+
+    if sh > sa:
+        winner, loser, ws, ls = h_tag, a_tag, sh, sa
+        home_won = True
+    elif sa > sh:
+        winner, loser, ws, ls = a_tag, h_tag, sa, sh
+        home_won = False
+    else:
+        winner = loser = None
+
+    # Typ wyniku
+    if winner is None:
+        opener = random.choice(COMMENTARY_OPENERS_DRAW)
+        if total == 0:
+            detail = 'Zero goli, zero emocji, zero powodow do swietowania po obu stronach.'
+        elif total >= 4:
+            detail = f'Bylo {sh}:{sa} — strzelanina z losowym podsumowaniem.'
+        else:
+            detail = f'{sh}:{sa}. Przynajmniej bramka lub dwie — nie bylo nudno.'
+        closing = 'Punkt do tabeli. I do nastepnego meczu.'
+
+    elif diff >= 3:
+        opener = random.choice(COMMENTARY_OPENERS_UPSET) if (not home_won and diff >= 3) else random.choice(COMMENTARY_OPENERS_WIN)
+        if home_won:
+            detail = f'{winner} rozjechali {loser} {sh}:{sa}. {"Ani chybi roznica klasy." if diff >= 4 else "Trzy gole roznica — wystarczajaco czyste."}'
+        else:
+            detail = f'{winner} zabrali komplet punktow z wyjazdu — {sh}:{sa}. Gospodarze ({loser}) nawet nie wiedzieli co ich uderzylo.'
+        closing = f'{"Ciekawy wieczor dla kibicow " + winner + "." if winner != h_tag else "Trybuny zadowolone."}'
+
+    elif diff == 0:
+        opener = random.choice(COMMENTARY_OPENERS_DRAW)
+        detail = f'{home} i {away} podzielili sie punktami — {sh}:{sa}.'
+        closing = 'Remis ktory nikomu szczegolnie nie pomaga.'
+
+    else:
+        # diff == 1 lub 2
+        if home_won:
+            opener = random.choice(COMMENTARY_OPENERS_WIN)
+            detail = f'{winner} wygrali {sh}:{sa} u siebie. Ciasno, nerwowo, ale gotowe.'
+        else:
+            opener = 'Niespodzianka? Moze troche.'
+            detail = f'{winner} wygrali na wyjezdzie {sa}:{sh}. {loser} nie utrzymali prowadzenia.'
+        closing = f'Trzy punkty dla {winner}. Tabela sie zgadza.'
+
+    return f'{opener} {detail} {closing}'
+
+
+def editorial_section_html(yesterday_matches):
+    """
+    Sekcja redakcyjna — komentarze do 2 najciekawszych meczow z wczoraj.
+    Wybiera mecze: UCL priorytet, potem mecze z duzym wynikiem lub niespodzianka.
+    """
+    if not yesterday_matches:
+        return ''
+
+    finished = [m for m in yesterday_matches if m.get('status') == 'FINISHED']
+    if not finished:
+        return ''
+
+    # Priorytet: UCL, potem mecze z wiekszym calkowitym wynikiem
+    def match_score_key(m):
+        comp_code = m.get('competition', {}).get('code', '')
+        sh = m['score']['fullTime'].get('home', 0) or 0
+        sa = m['score']['fullTime'].get('away', 0) or 0
+        ucl_bonus = 10 if comp_code == 'CL' else 0
+        return ucl_bonus + sh + sa
+
+    top2 = sorted(finished, key=match_score_key, reverse=True)[:2]
+
+    html = ''
+    for m in top2:
+        home  = _short_name(m['homeTeam'])
+        away  = _short_name(m['awayTeam'])
+        sh    = m['score']['fullTime'].get('home', 0) or 0
+        sa    = m['score']['fullTime'].get('away', 0) or 0
+        comp  = m.get('competition', {}).get('name', '')
+        score_cls = 'draw'
+        if sh > sa: score_cls = 'win-h'
+        if sa > sh: score_cls = 'win-a'
+        commentary = generate_match_commentary(m)
+
+        html += (
+            f'<article class="editorial-match">'
+            f'<div class="em-comp">{comp}</div>'
+            f'<div class="em-scoreline">'
+            f'<span class="em-team em-home">{home}</span>'
+            f'<span class="em-score {score_cls}">{sh}:{sa}</span>'
+            f'<span class="em-team em-away">{away}</span>'
+            f'</div>'
+            f'<p class="em-comment">{commentary}</p>'
+            f'</article>\n'
+        )
+
+    return html
 
 
 # ─── GENERATORY HTML ─────────────────────────────────────────────────────────
@@ -1442,6 +1717,117 @@ footer {
 footer a { color: #444; }
 footer a:hover { color: var(--gold); }
 
+/* ── EDITORIAL SECTION ── */
+.editorial-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.editorial-match {
+  background: var(--panel);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 16px;
+  border-top: 3px solid var(--gold);
+}
+.em-comp {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+.em-scoreline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.em-team {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ddd;
+}
+.em-home { text-align: right; }
+.em-away { text-align: left; }
+.em-score {
+  font-family: 'Courier New', monospace;
+  font-size: 28px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 4px;
+  min-width: 70px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.em-score.win-h { color: var(--green); background: rgba(0,187,68,0.12); }
+.em-score.win-a { color: #ff6644; background: rgba(255,102,68,0.12); }
+.em-score.draw  { color: #ccc; background: rgba(255,255,255,0.07); }
+.em-comment {
+  font-size: 13px;
+  color: #bbb;
+  line-height: 1.7;
+  font-style: italic;
+  border-left: 2px solid var(--gold);
+  padding-left: 10px;
+}
+
+/* ── DAILY FACTS ── */
+.facts-strip {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.fact-card {
+  background: var(--panel);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.fact-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+.fact-text {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.6;
+}
+.fact-text strong { color: #ddd; }
+
+/* ── SECTION LABELS ── */
+.section-label {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--bdr);
+}
+
 /* ── REDDIT POSTY ── */
 .reddit-post { padding: 10px 14px; border-bottom: 1px solid var(--bdr); transition: background 0.1s; }
 .reddit-post:last-child { border-bottom: none; }
@@ -1486,6 +1872,8 @@ footer a:hover { color: var(--gold); }
 @media (max-width: 900px) {
   .topbar-wrap { grid-template-columns: 1fr 1fr; }
   .container   { grid-template-columns: 1fr; }
+  .editorial-wrap { grid-template-columns: 1fr; }
+  .facts-strip { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
   .topbar-wrap { grid-template-columns: 1fr; }
@@ -1494,6 +1882,7 @@ footer a:hover { color: var(--gold); }
   .tab-btn { font-size: 10px; padding: 7px 8px; }
   .scorer-row { grid-template-columns: 20px 1fr 32px; }
   .sc-team, .sc-assists { display: none; }
+  .facts-strip { grid-template-columns: 1fr; }
 }
 '''
 
@@ -1671,6 +2060,20 @@ def generate():
     print('  Weszlo.com RSS...')
     weszlo_news = weszlo_html(max_items=6)
 
+    # Wikipedia: featured topic of the day (rotacja co 7 dni)
+    WIKI_TOPICS = [
+        'FC_Barcelona', 'Chelsea_F.C.', 'UEFA_Champions_League',
+        'Premier_League', 'La_Liga', 'Robert_Lewandowski',
+        'Lionel_Messi',
+    ]
+    wiki_topic = WIKI_TOPICS[(now_pl.day) % len(WIKI_TOPICS)]
+    print(f'  Wikipedia summary ({wiki_topic})...')
+    wiki_text  = wikipedia_summary(wiki_topic)
+
+    # Dzienny editorial i fakty
+    editorial_html = editorial_section_html(yest_matches)
+    facts_html     = daily_facts_html(now_pl.timetuple().tm_yday)
+
     print('  Tifo Football YouTube RSS...')
     tifo_html = tifo_videos_html(max_items=4)
 
@@ -1685,6 +2088,18 @@ def generate():
             f'</div>'
             f'</div>'
         )
+
+    editorial_block = ''
+    if editorial_html:
+        editorial_block = (
+            '<div class="section-label" id="editorial">&#9997; KOMENTARZ DOBITKA &mdash; wczoraj padlo</div>\n'
+            f'<div class="editorial-wrap">{editorial_html}</div>'
+        )
+
+    facts_block = (
+        f'<div class="section-label">&#128161; FAKT DNIA &mdash; {today_label}</div>\n'
+        f'<div class="facts-strip">{facts_html}</div>'
+    )
 
     # JS z podmienianym kluczem
     js_code = JS_TEMPLATE.replace('{API_KEY_PLACEHOLDER}', API_KEY)
@@ -1722,11 +2137,10 @@ def generate():
 
 <nav>
   <a href="#live">&#128308; Live</a>
+  <a href="#editorial">&#9997; Wczoraj</a>
   <a href="#dzisiaj">&#9654; Dzisiaj</a>
-  <a href="#linki">&#128293; Linki</a>
   <a href="#tabele">&#128202; Tabele</a>
   <a href="#ciekawostki">&#129504; Ciekawostki</a>
-  <a href="#radar">&#128301; Radar</a>
   <a href="https://www.flashscore.pl" target="_blank">&#9889; Flashscore</a>
 </nav>
 
@@ -1767,6 +2181,10 @@ def generate():
 </div>
 
 {previews_block}
+
+{editorial_block}
+
+{facts_block}
 
 <div class="container">
 
@@ -1908,6 +2326,7 @@ def generate():
   &nbsp;|&nbsp; <a href="https://understat.com" target="_blank">Understat</a> (xG)
   &nbsp;|&nbsp; <a href="https://reddit.com/r/soccer" target="_blank">Reddit</a>
   &nbsp;|&nbsp; <a href="https://weszlo.com" target="_blank">Weszlo.com</a>
+  &nbsp;|&nbsp; <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a>
   &nbsp;|&nbsp;
   Linki prowadza do oryginalnych zrodel. Opisy redakcji wlasne.<br>
   Zero trackerow. Zero reklam.
