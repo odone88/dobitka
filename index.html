@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOBITKA — Piłka. Sport. Bez ściemy.</title>
+<title>DOBITKA — Pilka. Sport. Bez sciemy.</title>
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -42,6 +42,10 @@ nav a { display: inline-block; padding: 9px 16px; font-size: 12px; font-weight: 
 nav a:first-child { border-left: 1px solid var(--bdr); }
 nav a:hover { background: var(--blue); color: var(--gold); text-decoration: none; }
 
+/* TOP BAR — 3 kolumny z dzis/wczoraj/urodziny */
+.topbar-wrap { max-width: 1100px; margin: 0 auto; padding: 16px 12px 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.previews-wrap { max-width: 1100px; margin: 0 auto; padding: 0 12px; }
+
 /* LAYOUT */
 .container { max-width: 1100px; margin: 0 auto; padding: 16px 12px; display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
 
@@ -50,6 +54,39 @@ nav a:hover { background: var(--blue); color: var(--gold); text-decoration: none
 .box-hdr { background: var(--blue); padding: 7px 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-family: Arial, sans-serif; }
 .box-hdr .sub { font-size: 10px; color: #aaa; font-weight: 400; text-transform: none; letter-spacing: 0; }
 .no-data { padding: 10px 14px; color: var(--muted); font-size: 12px; font-style: italic; }
+
+/* TODAY/YESTERDAY TABLE */
+.td-row { padding: 6px 10px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 65px 1fr 44px 1fr 38px; gap: 4px; align-items: center; font-size: 11px; }
+.td-row:last-child { border-bottom: none; }
+.td-row.live { background: #110500; }
+.td-comp { color: var(--muted); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-home { text-align: right; color: #ccc; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-away { color: #ccc; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-score { text-align: center; font-family: 'Courier New', monospace; font-size: 13px; font-weight: 900; padding: 1px 2px; border: 1px solid #333; }
+.td-score.win-h { color: var(--green); border-color: var(--green); }
+.td-score.win-a { color: #ff6644; border-color: #ff6644; }
+.td-score.draw   { color: #ccc; border-color: #444; }
+.td-score.live-score { color: #ffaa00; border-color: #ffaa00; }
+.td-status { text-align: right; font-size: 10px; color: var(--muted); font-family: Arial, sans-serif; }
+.td-time { color: var(--gold); font-size: 11px; font-family: 'Courier New', monospace; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.blink { animation: pulse 1.2s ease-in-out infinite; color: #ff4400 !important; font-weight: 700; }
+
+/* URODZINY */
+.birthday-item { padding: 10px 12px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; align-items: flex-start; }
+.birthday-item:last-child { border-bottom: none; }
+.bday-cake { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+.bday-name { color: var(--gold); font-size: 13px; font-family: Arial, sans-serif; }
+.bday-age { color: #aaa; font-size: 11px; font-family: Arial, sans-serif; }
+.bday-desc { font-size: 11px; color: var(--muted); margin-top: 2px; font-style: italic; }
+
+/* ZAPOWIEDZI */
+.preview-item { padding: 12px 14px; border-bottom: 1px solid var(--bdr); }
+.preview-item:last-child { border-bottom: none; }
+.preview-match { font-weight: 700; color: var(--gold); font-size: 14px; margin-bottom: 5px; font-family: Arial, sans-serif; }
+.preview-vs { color: var(--muted); font-size: 12px; font-weight: 400; }
+.preview-meta { font-weight: 400; color: var(--muted); font-size: 11px; margin-left: 8px; }
+.preview-text { font-size: 13px; color: #bbb; line-height: 1.6; }
 
 /* LINKI */
 .link-item { padding: 14px; border-bottom: 1px solid var(--bdr); }
@@ -73,7 +110,7 @@ nav a:hover { background: var(--blue); color: var(--gold); text-decoration: none
 .r-score.win-a { color: #ff6644; border-color: #ff6644; }
 .r-score.draw   { color: #ccc; border-color: #444; }
 
-/* NADCHODZĄCE MECZE */
+/* NADCHODZACE MECZE */
 .upcoming-row { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 1fr 30px 1fr 60px; gap: 6px; align-items: center; font-size: 12px; }
 .upcoming-row:last-child { border-bottom: none; }
 .u-home { text-align: right; color: #ccc; }
@@ -128,11 +165,27 @@ nav a:hover { background: var(--blue); color: var(--gold); text-decoration: none
 .table-nav a::after { content: "→"; color: var(--muted); }
 .table-nav a:hover { background: #111125; color: var(--gold); text-decoration: none; }
 
+/* CYTATY */
+.cytat-item { padding: 12px 14px; border-bottom: 1px solid var(--bdr); }
+.cytat-item:last-child { border-bottom: none; }
+.cytat-text { font-size: 14px; color: #ddd; font-style: italic; line-height: 1.5; margin-bottom: 5px; border-left: 3px solid var(--gold); padding-left: 10px; }
+.cytat-meta { font-size: 11px; color: var(--muted); font-family: Arial, sans-serif; }
+.cytat-meta strong { color: #aaa; }
+
+/* NEYMAR UPDATE */
+.neymar-box { padding: 14px; }
+.neymar-headline { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 8px; font-family: Arial, sans-serif; }
+.neymar-text { font-size: 12px; color: #aaa; line-height: 1.6; margin-bottom: 8px; }
+.neymar-text strong { color: #ddd; }
+.neymar-text em { color: #bbb; font-style: italic; }
+.neymar-link { font-size: 12px; }
+
 /* FOOTER */
 footer { background: #050508; border-top: 2px solid var(--bdr); text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-family: Arial, sans-serif; }
 footer a { color: #444; }
 
 @media (max-width: 768px) {
+  .topbar-wrap { grid-template-columns: 1fr; }
   .container { grid-template-columns: 1fr; }
   .logo { font-size: 28px; letter-spacing: 4px; }
   nav a { padding: 8px 10px; font-size: 10px; }
@@ -143,25 +196,54 @@ footer a { color: #444; }
 <body>
 
 <div class="ticker-wrap">
-  <span class="ticker-label">▶ LIVE</span>
+  <span class="ticker-label">&#9658; LIVE</span>
   <span class="ticker-text">
-    ★ DOBITKA — aktualizacja co 2 godziny ★ Champions League • Premier League • La Liga • Serie A • Ligue 1 • Ekstraklasa ★ Wyniki, tabele, linki — bez ściemy ★
+    &#9733; DOBITKA &mdash; aktualizacja co 2 godziny &#9733; Champions League &bull; Premier League &bull; La Liga &bull; Serie A &bull; Ligue 1 &bull; Ekstraklasa &#9733; Wyniki, tabele, linki &mdash; bez sciemy &#9733;
   </span>
 </div>
 
 <header>
-  <div class="logo">⚽ DOBITKA</div>
-  <div class="tagline">// Piłka. Sport. Bez ściemy. //</div>
-  <div class="updated">Ostatnia aktualizacja: <span>17.03.2026 05:55</span> &nbsp;|&nbsp; Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a></div>
+  <div class="logo">&#9917; DOBITKA</div>
+  <div class="tagline">// Pilka. Sport. Bez sciemy. //</div>
+  <div class="updated">Ostatnia aktualizacja: <span>17.03.2026 06:19</span> &nbsp;|&nbsp; Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a></div>
 </header>
 
 <nav>
-  <a href="#linki">🔥 Linki</a>
-  <a href="#tabele">📊 Tabele & Wyniki</a>
-  <a href="#ciekawostki">🧠 Ciekawostki</a>
-  <a href="#radar">🔭 Radary</a>
-  <a href="https://www.flashscore.pl" target="_blank">⚡ Live</a>
+  <a href="#dzisiaj">&#128293; Dzisiaj</a>
+  <a href="#linki">&#128293; Linki</a>
+  <a href="#tabele">&#128202; Tabele &amp; Wyniki</a>
+  <a href="#ciekawostki">&#129504; Ciekawostki</a>
+  <a href="#radar">&#128301; Radary</a>
+  <a href="https://www.flashscore.pl" target="_blank">&#9889; Live</a>
 </nav>
+
+<!-- TOP BAR: Dzisiaj / Wczoraj / Urodziny -->
+<div class="topbar-wrap" id="dzisiaj">
+
+  <div>
+    <div class="box">
+      <div class="box-hdr" style="background:#001a10;">&#9654; DZISIAJ W AKCJI <span class="sub">17.03.2026</span></div>
+      <p class="no-data">Dzis brak meczow w obsługiwanych ligach.<br><a href="https://www.flashscore.pl" target="_blank">Flashscore →</a></p>
+    </div>
+  </div>
+
+  <div>
+    <div class="box">
+      <div class="box-hdr" style="background:#1a0a00;">&#9664; WCZORAJSZE WYNIKI <span class="sub">16.03.2026</span></div>
+      <p class="no-data">Brak wynikow z wczoraj w obsługiwanych ligach.<br><a href="https://www.flashscore.pl" target="_blank">Flashscore →</a></p>
+    </div>
+  </div>
+
+  <div>
+    <div class="box">
+      <div class="box-hdr" style="background:#1a001a;">&#127874; URODZINY PILKARZY <span class="sub">dzisiaj (17.03.2026)</span></div>
+      <p class="no-data">Dzis brak znanych urodzin w bazie DOBITKA.<br><small>Baza zawiera ~50 znanych pilkarzy i trenerow.</small></p>
+    </div>
+  </div>
+
+</div><!-- /topbar-wrap -->
+
+
 
 <div class="container">
 
@@ -169,57 +251,57 @@ footer a { color: #444; }
   <div>
 
     <div class="box" id="linki">
-      <div class="box-hdr">🔥 Gorące Linki <span class="sub">wybrane przez redakcję</span></div>
+      <div class="box-hdr">&#128293; Gorace Linki <span class="sub">wybrane przez redakcje</span></div>
       <div class="link-item">
           <div class="link-cat ucl">Liga Mistrzów</div>
           <div class="link-title"><a href="https://www.uefa.com/uefachampionsleague/" target="_blank">Champions League — terminarz, wyniki, tabela</a></div>
           <div class="link-desc">Faza pucharowa UCL to najpiękniejsze 90 minut w kalendarzu kibiców — lub najgorsze, jeśli grasz o awans z jednobramkową zaliczką. Pełny terminarz i wyniki na stronie UEFA.</div>
-          <div class="link-source">▶ UEFA.com</div>
+          <div class="link-source">&#9658; UEFA.com</div>
         </div>
 <div class="link-item">
           <div class="link-cat laliga">La Liga</div>
           <div class="link-title"><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Yamal vs Vinicius — młodość kontra doświadczenie, Barceloneta kontra Bernabéu</a></div>
           <div class="link-desc">Klasico w tym sezonie to osobny gatunek dramaturgii. Kompletne statystyki zawodników i drużyn La Ligi na FBref — jeśli liczby są twoją miłością.</div>
-          <div class="link-source">▶ FBref.com</div>
+          <div class="link-source">&#9658; FBref.com</div>
         </div>
 <div class="link-item">
           <div class="link-cat pl">Premier League</div>
           <div class="link-title"><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Premier League — gdzie kupują za miliardy, gdzie grają na wynik</a></div>
           <div class="link-desc">Liga z największymi budżetami świata i najlepszą atmosferą. Statystyki, xG, pressowanie — wszystko co trzeba na FBref.</div>
-          <div class="link-source">▶ FBref.com</div>
+          <div class="link-source">&#9658; FBref.com</div>
         </div>
 <div class="link-item">
           <div class="link-cat ekstraklasa">Ekstraklasa</div>
           <div class="link-title"><a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Ekstraklasa — bo warto wiedzieć co u sąsiadów słychać</a></div>
           <div class="link-desc">Polska liga ma swoje uroki — niespodzianki, derby i od czasu do czasu piłkę, którą naprawdę warto obejrzeć. Wyniki i tabela na żywo.</div>
-          <div class="link-source">▶ Sofascore</div>
+          <div class="link-source">&#9658; Sofascore</div>
         </div>
 <div class="link-item">
           <div class="link-cat ">Transfery</div>
           <div class="link-title"><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt — ile naprawdę wart jest twój ulubiony zawodnik?</a></div>
           <div class="link-desc">Biblia wycen piłkarskich. Sprawdzasz czy nowy nabytek twojego klubu jest warty tyle co za niego zapłacono — Transfermarkt nie kłamie (przynajmniej nie bardziej niż agenci).</div>
-          <div class="link-source">▶ Transfermarkt.pl</div>
+          <div class="link-source">&#9658; Transfermarkt.pl</div>
         </div>
 
     </div>
 
     <!-- TABELE I WYNIKI — ZAKŁADKI -->
     <div class="box" id="tabele">
-      <div class="box-hdr">📊 Tabele, Wyniki & Terminarz <span class="sub">football-data.org</span></div>
+      <div class="box-hdr">&#128202; Tabele, Wyniki &amp; Terminarz <span class="sub">football-data.org</span></div>
       <div class="tab-btns">
-        <button class="tab-btn active" onclick="showTab('PL')">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
-<button class="tab-btn" onclick="showTab('PD')">🇪🇸 La Liga</button>
-<button class="tab-btn" onclick="showTab('SA')">🇮🇹 Serie A</button>
-<button class="tab-btn" onclick="showTab('FL1')">🇫🇷 Ligue 1</button>
-<button class="tab-btn" onclick="showTab('CL')">⭐ Champions League</button>
-<button class="tab-btn" onclick="showTab('PPL')">🇵🇱 Ekstraklasa</button>
+        <button class="tab-btn active" onclick="showTab('PL')">&#127988; Premier League</button>
+<button class="tab-btn" onclick="showTab('PD')">&#127466;&#127480; La Liga</button>
+<button class="tab-btn" onclick="showTab('SA')">&#127470;&#127481; Serie A</button>
+<button class="tab-btn" onclick="showTab('FL1')">&#127467;&#127479; Ligue 1</button>
+<button class="tab-btn" onclick="showTab('CL')">&#11088; Champions League</button>
+<button class="tab-btn" onclick="showTab('PPL')">&#127477;&#127473; Ekstraklasa</button>
 
       </div>
       <div class="tab-pane" id="tab-PL">
-          <div class="tab-league-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</div>
+          <div class="tab-league-title">&#127988; Premier League</div>
           <table class="standings-table">
       <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Drużyna</th>
+        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
         <th class="s-num">M</th><th class="s-num">W</th>
         <th class="s-num">R</th><th class="s-num">L</th>
         <th class="s-num">RB</th><th class="s-pts">PKT</th>
@@ -338,7 +420,7 @@ footer a { color: #444; }
           <span class="r-away">Bournemouth</span>
         </div>
 
-          <div class="subsection-title">Najbliższe mecze</div>
+          <div class="subsection-title">Najblizsze mecze</div>
           <div class="upcoming-row">
           <span class="u-home">Bournemouth</span>
           <span class="u-vs">vs</span>
@@ -372,10 +454,10 @@ footer a { color: #444; }
 
         </div>
 <div class="tab-pane" id="tab-PD">
-          <div class="tab-league-title">🇪🇸 La Liga</div>
+          <div class="tab-league-title">&#127466;&#127480; La Liga</div>
           <table class="standings-table">
       <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Drużyna</th>
+        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
         <th class="s-num">M</th><th class="s-num">W</th>
         <th class="s-num">R</th><th class="s-num">L</th>
         <th class="s-num">RB</th><th class="s-pts">PKT</th>
@@ -494,7 +576,7 @@ footer a { color: #444; }
           <span class="r-away">Rayo Vallecano</span>
         </div>
 
-          <div class="subsection-title">Najbliższe mecze</div>
+          <div class="subsection-title">Najblizsze mecze</div>
           <div class="upcoming-row">
           <span class="u-home">Villarreal</span>
           <span class="u-vs">vs</span>
@@ -528,10 +610,10 @@ footer a { color: #444; }
 
         </div>
 <div class="tab-pane" id="tab-SA">
-          <div class="tab-league-title">🇮🇹 Serie A</div>
+          <div class="tab-league-title">&#127470;&#127481; Serie A</div>
           <table class="standings-table">
       <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Drużyna</th>
+        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
         <th class="s-num">M</th><th class="s-num">W</th>
         <th class="s-num">R</th><th class="s-num">L</th>
         <th class="s-num">RB</th><th class="s-pts">PKT</th>
@@ -650,7 +732,7 @@ footer a { color: #444; }
           <span class="r-away">Lecce</span>
         </div>
 
-          <div class="subsection-title">Najbliższe mecze</div>
+          <div class="subsection-title">Najblizsze mecze</div>
           <div class="upcoming-row">
           <span class="u-home">Cagliari</span>
           <span class="u-vs">vs</span>
@@ -684,10 +766,10 @@ footer a { color: #444; }
 
         </div>
 <div class="tab-pane" id="tab-FL1">
-          <div class="tab-league-title">🇫🇷 Ligue 1</div>
+          <div class="tab-league-title">&#127467;&#127479; Ligue 1</div>
           <table class="standings-table">
       <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Drużyna</th>
+        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
         <th class="s-num">M</th><th class="s-num">W</th>
         <th class="s-num">R</th><th class="s-num">L</th>
         <th class="s-num">RB</th><th class="s-pts">PKT</th>
@@ -806,7 +888,7 @@ footer a { color: #444; }
           <span class="r-away">Marseille</span>
         </div>
 
-          <div class="subsection-title">Najbliższe mecze</div>
+          <div class="subsection-title">Najblizsze mecze</div>
           <div class="upcoming-row">
           <span class="u-home">RC Lens</span>
           <span class="u-vs">vs</span>
@@ -840,10 +922,10 @@ footer a { color: #444; }
 
         </div>
 <div class="tab-pane" id="tab-CL">
-          <div class="tab-league-title">⭐ Champions League</div>
+          <div class="tab-league-title">&#11088; Champions League</div>
           <table class="standings-table">
       <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Drużyna</th>
+        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
         <th class="s-num">M</th><th class="s-num">W</th>
         <th class="s-num">R</th><th class="s-num">L</th>
         <th class="s-num">RB</th><th class="s-pts">PKT</th>
@@ -962,7 +1044,7 @@ footer a { color: #444; }
           <span class="r-away">Arsenal</span>
         </div>
 
-          <div class="subsection-title">Najbliższe mecze</div>
+          <div class="subsection-title">Najblizsze mecze</div>
           <div class="upcoming-row">
           <span class="u-home">Sporting CP</span>
           <span class="u-vs">vs</span>
@@ -996,10 +1078,10 @@ footer a { color: #444; }
 
         </div>
 <div class="tab-pane" id="tab-PPL">
-          <div class="tab-league-title">🇵🇱 Ekstraklasa</div>
+          <div class="tab-league-title">&#127477;&#127473; Ekstraklasa</div>
           <table class="standings-table">
       <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Drużyna</th>
+        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
         <th class="s-num">M</th><th class="s-num">W</th>
         <th class="s-num">R</th><th class="s-num">L</th>
         <th class="s-num">RB</th><th class="s-pts">PKT</th>
@@ -1118,7 +1200,7 @@ footer a { color: #444; }
           <span class="r-away">Sporting CP</span>
         </div>
 
-          <div class="subsection-title">Najbliższe mecze</div>
+          <div class="subsection-title">Najblizsze mecze</div>
           <div class="upcoming-row">
           <span class="u-home">Amadora</span>
           <span class="u-vs">vs</span>
@@ -1159,8 +1241,38 @@ footer a { color: #444; }
   <!-- PRAWA KOLUMNA -->
   <div>
 
+    <div class="box">
+      <div class="box-hdr" style="background:#1a0030;">&#128483; Neymar Jr &mdash; aktualny status</div>
+      <div class="neymar-box">
+      <div class="neymar-headline">&#128308; Neymar Jr i reprezentacja Brazylii — saga trwa</div>
+      <div class="neymar-text">Po ponad roku rehabilitacji po zerwaniu ACL Neymar wrócił do gry w Al-Hilal, ale jego miejsce w selekcji kadry Brazylii pozostaje otwarte. Selekcjoner Dorival Júnior jasno: <strong>"Neymar musi wygrać zdrowie, zanim wygramy z nim mecz."</strong> Sam zainteresowany na Instagramie: <em>"Wróce. Nie wiem kiedy, ale wróce."</em> Kibice Brazylii czekają. Reszta świata też — bo futbol bez Neymara jest o klasę nudniejszy.</div>
+      <div class="neymar-link"><a href="https://www.transfermarkt.pl/neymar/profil/spieler/68290" target="_blank">Transfermarkt — profil Neymara &#8594;</a></div>
+    </div>
+    </div>
+
+    <div class="box">
+      <div class="box-hdr" style="background:#001830;">&#128172; Z konferencji prasowych</div>
+      <div class="cytat-item">
+          <div class="cytat-text">"Nie rozmawiamy o remisach. Gramy żeby wygrywać. Remis to porażka w przebraniu."</div>
+          <div class="cytat-meta"><strong>Pep Guardiola</strong> (Manchester City) &mdash; <em>po konferencji przed meczem ligowym</em></div>
+        </div>
+<div class="cytat-item">
+          <div class="cytat-text">"Real Madryt nigdy nie jest favoritem. Ale zawsze wygrywa."</div>
+          <div class="cytat-meta"><strong>Carlo Ancelotti</strong> (Real Madryt) &mdash; <em>przed fazą pucharową UCL</em></div>
+        </div>
+<div class="cytat-item">
+          <div class="cytat-text">"Kiedy masz 20 lat i grasz w Realu, nie pytasz czy jesteś gotowy. Po prostu grasz."</div>
+          <div class="cytat-meta"><strong>Jude Bellingham</strong> (Real Madryt) &mdash; <em>wywiad dla Sky Sports</em></div>
+        </div>
+<div class="cytat-item">
+          <div class="cytat-text">"Mam 17 lat i gram dla Barcelony. To jedyne co wiem. Reszta to szum."</div>
+          <div class="cytat-meta"><strong>Lamine Yamal</strong> (FC Barcelona) &mdash; <em>konferencja prasowa przed El Clasico</em></div>
+        </div>
+
+    </div>
+
     <div class="box" id="ciekawostki">
-      <div class="box-hdr">🧠 Ciekawostki</div>
+      <div class="box-hdr">&#129504; Ciekawostki</div>
       <div class="ciekawostka-item">
           <span class="ciek-num">#01</span>
           <p><strong>Lamine Yamal urodził się 13 lipca 2007</strong> — dokładnie w dniu finału Mundialu, kiedy Iniesta świętował złoto. 17 lat później Yamal wygrał EURO 2024 z tą samą reprezentacją. Scenarzysta piłki nożnej ma niesamowite poczucie humoru.</p>
@@ -1181,23 +1293,35 @@ footer a { color: #444; }
           <span class="ciek-num">#05</span>
           <p><strong>FC Barcelona przez ponad 100 lat</strong> (1899–2006) grała bez żadnego sponsora na koszulce. Potem wzięła kasę od Qatar Foundation i wszystko się zmieniło. Przynajmniej byli ostatni z wielkich, którzy to zrobili.</p>
         </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#06</span>
+          <p><strong>Cristiano Ronaldo i Neymar Jr</strong> obchodzą urodziny tego samego dnia — 5 lutego. CR7 w 1985, Neymar w 1992. Dwie największe gwiazdy swojej generacji, jeden dzień urodzin. Kosmos.</p>
+        </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#07</span>
+          <p><strong>Erling Haaland w sezonie 2022/23</strong> strzelił 52 gole we wszystkich rozgrywkach dla Manchesteru City. Premier League, FA Cup, UCL — wszędzie. W poprzednim sezonie Salah pobił rekord PL z 32 golami. Haaland przekroczył to w samej lidze.</p>
+        </div>
+<div class="ciekawostka-item">
+          <span class="ciek-num">#08</span>
+          <p><strong>Robert Lewandowski w sezonie 2020/21</strong> strzelił 41 goli w Bundeslidze, bijąc rekord Gerda Müllera z 1971/72, który stał przez 49 lat. Bayern wygrał ligę, a Lewy dostał... drugie miejsce w Złotej Piłce przez COVID. Sprawiedliwość jest ślepa.</p>
+        </div>
 
     </div>
 
     <div class="box" id="radar">
-      <div class="box-hdr" style="background:#00356A;">🔴🔵 FC Barcelona Radar</div>
+      <div class="box-hdr" style="background:#00356A;">&#128308;&#128309; FC Barcelona Radar</div>
       <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://www.sofascore.com/team/football/fc-barcelona/2817" target="_blank">Wyniki i tabela La Liga</a><br>
           <span class="r-desc">Sofascore — aktualne statystyki, tabela, terminarz FC Barcelona</span></div>
         </div>
 <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://www.transfermarkt.pl/lamine-yamal/profil/spieler/983709" target="_blank">Lamine Yamal</a><br>
           <span class="r-desc">Transfermarkt — profil, wycena, historia transferów</span></div>
         </div>
 <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://fbref.com/en/squads/206d90db/FC-Barcelona-Stats" target="_blank">Statystyki zaawansowane</a><br>
           <span class="r-desc">FBref — xG, pressing, posiadanie — Barca pod lupą</span></div>
         </div>
@@ -1205,19 +1329,19 @@ footer a { color: #444; }
     </div>
 
     <div class="box">
-      <div class="box-hdr" style="background:#38003c;">🟣 Premier League Radar</div>
+      <div class="box-hdr" style="background:#38003c;">&#128995; Premier League Radar</div>
       <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://www.sofascore.com/tournament/football/england/premier-league/17#tab:standings" target="_blank">Tabela Premier League</a><br>
           <span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy</span></div>
         </div>
 <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Statystyki ligowe</a><br>
           <span class="r-desc">FBref — zaawansowane statystyki wszystkich drużyn PL</span></div>
         </div>
 <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://www.transfermarkt.pl/premier-league/startseite/wettbewerb/GB1" target="_blank">Transfery i wyceny</a><br>
           <span class="r-desc">Transfermarkt — wartości rynkowe zawodników Premier League</span></div>
         </div>
@@ -1225,19 +1349,19 @@ footer a { color: #444; }
     </div>
 
     <div class="box">
-      <div class="box-hdr" style="background:#8B0000;">🟡 La Liga Radar</div>
+      <div class="box-hdr" style="background:#8B0000;">&#128993; La Liga Radar</div>
       <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://www.sofascore.com/tournament/football/spain/laliga/8#tab:standings" target="_blank">Tabela La Liga</a><br>
           <span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy La Liga</span></div>
         </div>
 <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Statystyki ligowe</a><br>
           <span class="r-desc">FBref — zaawansowane statystyki La Liga</span></div>
         </div>
 <div class="radar-item">
-          <span class="r-bullet">★</span>
+          <span class="r-bullet">&#9733;</span>
           <div><a href="https://www.transfermarkt.pl/primera-division/startseite/wettbewerb/ES1" target="_blank">Transfery i wyceny</a><br>
           <span class="r-desc">Transfermarkt — wartości rynkowe zawodników La Liga</span></div>
         </div>
@@ -1245,12 +1369,12 @@ footer a { color: #444; }
     </div>
 
     <div class="box">
-      <div class="box-hdr">🔗 Szybkie Linki</div>
-      <div class="quick-link"><span>Wyniki na żywo</span><a href="https://www.flashscore.pl" target="_blank">Flashscore →</a></div>
-      <div class="quick-link"><span>Statystyki zaawansowane</span><a href="https://fbref.com" target="_blank">FBref →</a></div>
-      <div class="quick-link"><span>Wyceny zawodników</span><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt →</a></div>
-      <div class="quick-link"><span>Sofascore</span><a href="https://www.sofascore.com" target="_blank">Sofascore →</a></div>
-      <div class="quick-link"><span>Oficjalna UCL</span><a href="https://www.uefa.com" target="_blank">UEFA →</a></div>
+      <div class="box-hdr">&#128279; Szybkie Linki</div>
+      <div class="quick-link"><span>Wyniki na zywo</span><a href="https://www.flashscore.pl" target="_blank">Flashscore &#8594;</a></div>
+      <div class="quick-link"><span>Statystyki zaawansowane</span><a href="https://fbref.com" target="_blank">FBref &#8594;</a></div>
+      <div class="quick-link"><span>Wyceny zawodnikow</span><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt &#8594;</a></div>
+      <div class="quick-link"><span>Sofascore</span><a href="https://www.sofascore.com" target="_blank">Sofascore &#8594;</a></div>
+      <div class="quick-link"><span>Oficjalna UCL</span><a href="https://www.uefa.com" target="_blank">UEFA &#8594;</a></div>
     </div>
 
   </div>
@@ -1258,10 +1382,10 @@ footer a { color: #444; }
 </div><!-- /container -->
 
 <footer>
-  ★ DOBITKA — agregator sportowy dla kibiców bez czasu na chaos ★<br><br>
+  &#9733; DOBITKA &mdash; agregator sportowy dla kibicow bez czasu na chaos &#9733;<br><br>
   Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a> (CC BY 4.0) &nbsp;|&nbsp;
-  Linki prowadzą do oryginalnych źródeł. Opisy redakcji własne.<br>
-  Zero trackerów. Zero reklam.
+  Linki prowadza do oryginalnych zrodel. Opisy redakcji wlasne.<br>
+  Zero trackerow. Zero reklam.
 </footer>
 
 <script>
@@ -1274,7 +1398,6 @@ function showTab(code) {
     if (b.getAttribute('onclick').includes(code)) b.classList.add('active');
   });
 }
-// Aktywuj pierwszy tab domyślnie
 window.onload = function() {
   var first = document.querySelector('.tab-pane');
   if (first) first.classList.add('active');
