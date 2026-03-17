@@ -3,219 +3,548 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOBITKA — Pilka. Sport. Bez sciemy.</title>
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<title>DOBITKA &#9917; Pilka. Sport. Bez sciemy.</title>
+<meta name="description" content="Agregator pilkarski — tabele, wyniki, terminarz, strzelcy. Champions League, Premier League, La Liga, Serie A, Bundesliga, Ligue 1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:    #09090f;
-  --panel: #0e0e1a;
-  --bdr:   #252540;
-  --gold:  #FFD700;
-  --red:   #CC1100;
-  --green: #00BB44;
-  --blue:  #0d2060;
-  --text:  #cccccc;
-  --muted: #555566;
-  --link:  #7799ff;
+  --bg:      #07070f;
+  --panel:   #0f0f1d;
+  --bdr:     #1e1e38;
+  --gold:    #ffd700;
+  --red:     #cc1100;
+  --green:   #00bb44;
+  --text:    #cccccc;
+  --muted:   #55556a;
+  --link:    #7799ff;
+  --radius:  6px;
+  /* Per-liga kolory */
+  --cl-color:  #0a1e6e;
+  --pl-color:  #2e0040;
+  --pd-color:  #a83c00;
+  --sa-color:  #00337a;
+  --bl1-color: #8a0010;
+  --fl1-color: #001250;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Courier Prime', 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
 a { color: var(--link); text-decoration: none; }
 a:hover { color: var(--gold); text-decoration: underline; }
 
-/* TICKER */
-.ticker-wrap { background: var(--red); overflow: hidden; white-space: nowrap; padding: 5px 0; }
-.ticker-label { background: var(--gold); color: #000; font-weight: 700; font-size: 11px; padding: 0 10px; margin-right: 8px; letter-spacing: 1px; font-family: Arial, sans-serif; }
-.ticker-text { display: inline-block; animation: scroll 50s linear infinite; font-size: 12px; color: #fff; letter-spacing: 0.5px; font-family: Arial, sans-serif; }
+/* ── TICKER ── */
+.ticker-wrap {
+  background: var(--red);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 5px 0;
+}
+.ticker-label {
+  background: var(--gold);
+  color: #000;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 0 10px;
+  margin-right: 8px;
+  letter-spacing: 1px;
+}
+.ticker-text {
+  display: inline-block;
+  animation: scroll 55s linear infinite;
+  font-size: 12px;
+  color: #fff;
+  letter-spacing: 0.4px;
+}
 @keyframes scroll { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
 
-/* HEADER */
-header { background: linear-gradient(180deg, #060614 0%, var(--bg) 100%); border-bottom: 3px solid var(--gold); padding: 20px 0 14px; text-align: center; }
-.logo { font-family: 'Courier New', monospace; font-size: 42px; font-weight: 900; color: var(--gold); text-shadow: 3px 3px 0 #770000, 5px 5px 0 #330000; letter-spacing: 8px; }
-.tagline { font-size: 13px; color: #888; margin-top: 6px; letter-spacing: 3px; text-transform: uppercase; font-family: Arial, sans-serif; }
-.updated { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: Arial, sans-serif; }
+/* ── HEADER ── */
+header {
+  background: radial-gradient(ellipse at 50% 0%, #131340 0%, var(--bg) 70%);
+  border-bottom: 3px solid var(--gold);
+  padding: 24px 0 16px;
+  text-align: center;
+}
+.logo {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #770000, 6px 6px 0 #330000;
+  letter-spacing: clamp(4px, 1vw, 10px);
+}
+.tagline { font-size: 12px; color: #666; margin-top: 6px; letter-spacing: 3px; text-transform: uppercase; }
+.updated { font-size: 11px; color: var(--muted); margin-top: 6px; }
 .updated span { color: var(--gold); }
 
-/* NAV */
-nav { background: #0a0a18; border-bottom: 2px solid var(--bdr); text-align: center; padding: 0; }
-nav a { display: inline-block; padding: 9px 16px; font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 1px; text-transform: uppercase; border-right: 1px solid var(--bdr); font-family: Arial, sans-serif; transition: all 0.15s; }
+/* ── NAV (sticky) ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7, 7, 15, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--bdr);
+  text-align: center;
+  padding: 0;
+}
+nav a {
+  display: inline-block;
+  padding: 9px 15px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-right: 1px solid var(--bdr);
+  transition: background 0.15s, color 0.15s;
+}
 nav a:first-child { border-left: 1px solid var(--bdr); }
-nav a:hover { background: var(--blue); color: var(--gold); text-decoration: none; }
+nav a:hover { background: #111130; color: var(--gold); text-decoration: none; }
 
-/* TOP BAR — 3 kolumny z dzis/wczoraj/urodziny */
-.topbar-wrap { max-width: 1100px; margin: 0 auto; padding: 16px 12px 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+/* ── LIVE SECTION ── */
+#live-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 12px 0;
+}
+#live-section.hidden { display: none; }
+.live-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 0;
+}
+.live-card {
+  background: #120500;
+  border: 1px solid #442200;
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  min-width: 200px;
+  flex: 1 1 200px;
+}
+.live-card .lc-comp { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.live-card .lc-teams { font-size: 13px; color: #ccc; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.live-card .lc-score { font-family: 'Courier New', monospace; font-size: 20px; font-weight: 900; color: #ffaa00; }
+.live-card .lc-min { font-size: 10px; color: #ff6600; font-weight: 700; }
+.live-no-match { padding: 8px 0; font-size: 12px; color: var(--muted); font-style: italic; }
+
+/* ── TOPBAR (3 kolumny) ── */
+.topbar-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 12px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
 .previews-wrap { max-width: 1100px; margin: 0 auto; padding: 0 12px; }
 
-/* LAYOUT */
-.container { max-width: 1100px; margin: 0 auto; padding: 16px 12px; display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+/* ── CONTAINER (2 kolumny) ── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 12px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+}
 
-/* BOX */
-.box { background: var(--panel); border: 1px solid var(--bdr); margin-bottom: 16px; }
-.box-hdr { background: var(--blue); padding: 7px 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-family: Arial, sans-serif; }
-.box-hdr .sub { font-size: 10px; color: #aaa; font-weight: 400; text-transform: none; letter-spacing: 0; }
+/* ── BOX ── */
+.box {
+  background: var(--panel);
+  border: 1px solid var(--bdr);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.box-hdr {
+  background: #111130;
+  padding: 8px 14px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid var(--gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+.box-hdr .sub { font-size: 10px; color: #888; font-weight: 400; text-transform: none; letter-spacing: 0; }
 .no-data { padding: 10px 14px; color: var(--muted); font-size: 12px; font-style: italic; }
 
-/* TODAY/YESTERDAY TABLE */
-.td-row { padding: 6px 10px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 65px 1fr 44px 1fr 38px; gap: 4px; align-items: center; font-size: 11px; }
+/* ── FEATURED TEAM ── */
+.featured-team {
+  padding: 14px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ft-badge {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.ft-no-badge { font-size: 40px; flex-shrink: 0; }
+.ft-name { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+.ft-meta { font-size: 11px; color: #888; margin-bottom: 6px; }
+.ft-desc { font-size: 12px; color: #aaa; line-height: 1.5; font-style: italic; }
+
+/* ── TODAY / YESTERDAY TABLE ── */
+.td-row {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--bdr);
+  display: grid;
+  grid-template-columns: 65px 1fr 44px 1fr 38px;
+  gap: 4px;
+  align-items: center;
+  font-size: 11px;
+  transition: background 0.1s;
+}
 .td-row:last-child { border-bottom: none; }
+.td-row:hover { background: #111128; }
 .td-row.live { background: #110500; }
 .td-comp { color: var(--muted); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.td-home { text-align: right; color: #ccc; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.td-away { color: #ccc; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.td-score { text-align: center; font-family: 'Courier New', monospace; font-size: 13px; font-weight: 900; padding: 1px 2px; border: 1px solid #333; }
-.td-score.win-h { color: var(--green); border-color: var(--green); }
-.td-score.win-a { color: #ff6644; border-color: #ff6644; }
-.td-score.draw   { color: #ccc; border-color: #444; }
-.td-score.live-score { color: #ffaa00; border-color: #ffaa00; }
-.td-status { text-align: right; font-size: 10px; color: var(--muted); font-family: Arial, sans-serif; }
+.td-home { text-align: right; color: #ccc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-away { color: #ccc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-score {
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 1px 3px;
+  border: 1px solid #333;
+  border-radius: 3px;
+}
+.td-score.win-h { background: rgba(0,187,68,0.12); color: var(--green); border-color: var(--green); }
+.td-score.win-a { background: rgba(255,86,68,0.12); color: #ff6644; border-color: #ff6644; }
+.td-score.draw  { color: #ccc; border-color: #444; }
+.td-score.live-score { color: #ffaa00; border-color: #ffaa00; background: rgba(255,170,0,0.08); }
+.td-status { text-align: right; font-size: 10px; color: var(--muted); }
 .td-time { color: var(--gold); font-size: 11px; font-family: 'Courier New', monospace; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
 .blink { animation: pulse 1.2s ease-in-out infinite; color: #ff4400 !important; font-weight: 700; }
 
-/* URODZINY */
-.birthday-item { padding: 10px 12px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; align-items: flex-start; }
+/* ── URODZINY ── */
+.birthday-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--bdr);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
 .birthday-item:last-child { border-bottom: none; }
-.bday-cake { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
-.bday-name { color: var(--gold); font-size: 13px; font-family: Arial, sans-serif; }
-.bday-age { color: #aaa; font-size: 11px; font-family: Arial, sans-serif; }
+.bday-cake { font-size: 20px; flex-shrink: 0; line-height: 1.4; }
+.bday-photo { width: 42px; height: 42px; object-fit: cover; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--gold); }
+.bday-name { color: var(--gold); font-size: 13px; font-weight: 700; }
+.bday-age { color: #aaa; font-size: 11px; }
 .bday-desc { font-size: 11px; color: var(--muted); margin-top: 2px; font-style: italic; }
 
-/* ZAPOWIEDZI */
+/* ── ZAPOWIEDZI ── */
 .preview-item { padding: 12px 14px; border-bottom: 1px solid var(--bdr); }
 .preview-item:last-child { border-bottom: none; }
-.preview-match { font-weight: 700; color: var(--gold); font-size: 14px; margin-bottom: 5px; font-family: Arial, sans-serif; }
-.preview-vs { color: var(--muted); font-size: 12px; font-weight: 400; }
-.preview-meta { font-weight: 400; color: var(--muted); font-size: 11px; margin-left: 8px; }
-.preview-text { font-size: 13px; color: #bbb; line-height: 1.6; }
+.preview-match { font-weight: 700; color: var(--gold); font-size: 13px; margin-bottom: 4px; }
+.preview-vs { color: var(--muted); font-size: 11px; font-weight: 400; }
+.preview-meta { font-weight: 400; color: var(--muted); font-size: 10px; margin-left: 8px; }
+.preview-text { font-size: 12px; color: #bbb; line-height: 1.6; }
 
-/* LINKI */
-.link-item { padding: 14px; border-bottom: 1px solid var(--bdr); }
+/* ── LINKI ── */
+.link-item { padding: 14px; border-bottom: 1px solid var(--bdr); transition: background 0.1s; }
 .link-item:last-child { border-bottom: none; }
-.link-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; font-family: Arial, sans-serif; color: var(--muted); }
-.link-cat.ucl { color: #4488ff; } .link-cat.laliga { color: #cc8800; } .link-cat.pl { color: #7700cc; } .link-cat.ekstraklasa { color: var(--green); }
-.link-title { font-size: 17px; font-weight: 700; color: #eee; line-height: 1.2; margin-bottom: 5px; font-family: Arial, sans-serif; }
+.link-item:hover { background: #111128; }
+.link-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; color: var(--muted); }
+.link-cat.ucl        { color: #4488ff; }
+.link-cat.laliga     { color: #cc8800; }
+.link-cat.pl         { color: #aa44ff; }
+.link-cat.bundesliga { color: #ff4444; }
+.link-cat.ekstraklasa{ color: var(--green); }
+.link-title { font-size: 15px; font-weight: 700; color: #eee; line-height: 1.2; margin-bottom: 5px; }
 .link-title a { color: #eee; }
-.link-title a:hover { color: var(--gold); }
-.link-desc { font-size: 12px; color: #999; line-height: 1.5; font-style: italic; }
-.link-source { font-size: 12px; color: var(--muted); margin-top: 5px; }
-.link-source::before { content: "▶ "; color: var(--gold); }
+.link-title a:hover { color: var(--gold); text-decoration: none; }
+.link-desc { font-size: 12px; color: #888; line-height: 1.5; font-style: italic; }
+.link-source { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.link-source::before { content: "\25B6  "; color: var(--gold); }
 
-/* WYNIKI */
-.result-row { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 1fr 60px 1fr; gap: 6px; align-items: center; font-size: 13px; }
+/* ── WYNIKI ── */
+.result-row {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--bdr);
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.1s;
+}
 .result-row:last-child { border-bottom: none; }
+.result-row:hover { background: #111128; }
 .r-home { text-align: right; color: #ccc; }
-.r-away { text-align: left; color: #ccc; }
-.r-score { text-align: center; font-family: 'Courier New', monospace; font-size: 16px; font-weight: 900; padding: 1px 4px; border: 1px solid #333; }
-.r-score.win-h { color: var(--green); border-color: var(--green); }
-.r-score.win-a { color: #ff6644; border-color: #ff6644; }
-.r-score.draw   { color: #ccc; border-color: #444; }
+.r-away { color: #ccc; }
+.r-score {
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 900;
+  padding: 1px 4px;
+  border: 1px solid #333;
+  border-radius: 3px;
+}
+.r-score.win-h { background: rgba(0,187,68,0.12); color: var(--green); border-color: var(--green); }
+.r-score.win-a { background: rgba(255,86,68,0.12); color: #ff6644; border-color: #ff6644; }
+.r-score.draw  { color: #ccc; border-color: #444; }
 
-/* NADCHODZACE MECZE */
-.upcoming-row { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: grid; grid-template-columns: 1fr 30px 1fr 60px; gap: 6px; align-items: center; font-size: 12px; }
+/* ── UPCOMING ── */
+.upcoming-row {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--bdr);
+  display: grid;
+  grid-template-columns: 1fr 30px 1fr 65px;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+}
 .upcoming-row:last-child { border-bottom: none; }
 .u-home { text-align: right; color: #ccc; }
 .u-away { color: #ccc; }
-.u-vs { text-align: center; color: var(--muted); font-size: 11px; }
-.u-time { text-align: right; font-family: 'Courier New', monospace; color: var(--gold); font-size: 13px; }
+.u-vs   { text-align: center; color: var(--muted); font-size: 11px; }
+.u-time { text-align: right; font-family: 'Courier New', monospace; color: var(--gold); font-size: 12px; }
 
-/* TABELE LIGOWE — TABS */
-.tab-btns { display: flex; flex-wrap: wrap; background: #0a0a18; border-bottom: 1px solid var(--bdr); }
-.tab-btn { background: none; border: none; border-right: 1px solid var(--bdr); color: #888; padding: 8px 12px; font-size: 11px; font-family: Arial, sans-serif; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.15s; }
-.tab-btn:hover { background: var(--blue); color: var(--gold); }
-.tab-btn.active { background: var(--blue); color: var(--gold); border-bottom: 2px solid var(--gold); }
+/* ── STRZELCY ── */
+.scorers-list { padding: 6px 0; }
+.scorer-row {
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--bdr);
+  display: grid;
+  grid-template-columns: 22px 1fr 90px 32px 36px;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+}
+.scorer-row:last-child { border-bottom: none; }
+.sc-rank  { color: var(--muted); font-size: 11px; text-align: right; }
+.sc-name  { color: #ddd; font-weight: 600; }
+.sc-team  { color: #888; font-size: 11px; }
+.sc-goals { text-align: right; font-family: 'Courier New', monospace; font-size: 20px; font-weight: 900; color: var(--gold); }
+.sc-assists { font-size: 10px; color: var(--muted); text-align: right; }
+
+/* ── TABS LIGOWE ── */
+.tab-btns { display: flex; flex-wrap: wrap; background: #0a0a1a; border-bottom: 1px solid var(--bdr); }
+.tab-btn {
+  background: none;
+  border: none;
+  border-right: 1px solid var(--bdr);
+  color: #777;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.15s, color 0.15s;
+}
+.tab-btn:hover { background: #111130; color: var(--gold); }
+.tab-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+.tab-btn[data-code="CL"].active  { background: var(--cl-color); }
+.tab-btn[data-code="PL"].active  { background: var(--pl-color); }
+.tab-btn[data-code="PD"].active  { background: var(--pd-color); }
+.tab-btn[data-code="SA"].active  { background: var(--sa-color); }
+.tab-btn[data-code="BL1"].active { background: var(--bl1-color); }
+.tab-btn[data-code="FL1"].active { background: var(--fl1-color); }
 .tab-pane { display: none; padding: 12px; }
 .tab-pane.active { display: block; }
-.tab-league-title { font-weight: 700; font-size: 15px; color: var(--gold); margin-bottom: 10px; font-family: Arial, sans-serif; }
-.subsection-title { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin: 14px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--bdr); font-family: Arial, sans-serif; }
+.tab-league-title { font-weight: 700; font-size: 15px; color: var(--gold); margin-bottom: 10px; }
+.subsection-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 14px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--bdr);
+}
 
-/* STANDINGS TABLE */
+/* ── STANDINGS TABLE ── */
 .standings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.standings-table .s-header { color: #666; font-size: 10px; font-family: Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--bdr); }
+.standings-table .s-header { color: #555; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--bdr); }
 .standings-table th, .standings-table td { padding: 4px 3px; }
-.s-pos { text-align: right; width: 20px; color: #666; }
+.s-pos  { text-align: right; width: 20px; color: #555; }
 .s-team { padding-left: 8px !important; }
-.s-num { text-align: center; width: 26px; color: #999; }
-.s-gd { color: #888 !important; }
-.s-pts { text-align: center; width: 30px; color: var(--gold) !important; font-weight: 700; }
-.standings-table tr:hover { background: #111125; }
+.s-num  { text-align: center; width: 26px; color: #888; }
+.s-gd   { color: #777 !important; }
+.s-pts  { text-align: center; width: 30px; color: var(--gold) !important; font-weight: 700; font-family: 'Courier New', monospace; }
+.standings-table tr:hover { background: #111128; }
 
-/* CIEKAWOSTKI */
+/* ── CIEKAWOSTKI ── */
 .ciekawostka-item { padding: 12px 14px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; }
 .ciekawostka-item:last-child { border-bottom: none; }
-.ciek-num { font-family: 'Courier New', monospace; font-size: 22px; color: var(--gold); opacity: 0.5; flex-shrink: 0; line-height: 1; }
-.ciekawostka-item p { font-size: 13px; color: #aaa; line-height: 1.5; }
+.ciek-num { font-family: 'Courier New', monospace; font-size: 22px; color: var(--gold); opacity: 0.4; flex-shrink: 0; line-height: 1; }
+.ciekawostka-item p { font-size: 12px; color: #aaa; line-height: 1.55; }
 .ciekawostka-item p strong { color: #ddd; }
 
-/* RADAR */
+/* ── RADAR ── */
 .radar-item { padding: 9px 14px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; font-size: 13px; }
 .radar-item:last-child { border-bottom: none; }
 .r-bullet { color: var(--gold); flex-shrink: 0; }
 .r-desc { font-size: 11px; color: var(--muted); display: block; }
 
-/* SZYBKIE LINKI */
-.quick-link { padding: 8px 14px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-.quick-link:last-child { border-bottom: none; }
-.quick-link span { color: var(--muted); font-size: 12px; }
-.quick-link a { font-weight: 700; }
-
-/* TABLE NAV (prawa kolumna) */
-.table-nav { display: flex; flex-direction: column; }
-.table-nav a { padding: 9px 14px; border-bottom: 1px solid var(--bdr); font-size: 13px; color: #bbb; display: flex; justify-content: space-between; font-family: Arial, sans-serif; }
-.table-nav a:last-child { border-bottom: none; }
-.table-nav a::after { content: "→"; color: var(--muted); }
-.table-nav a:hover { background: #111125; color: var(--gold); text-decoration: none; }
-
-/* CYTATY */
+/* ── CYTATY ── */
 .cytat-item { padding: 12px 14px; border-bottom: 1px solid var(--bdr); }
 .cytat-item:last-child { border-bottom: none; }
-.cytat-text { font-size: 14px; color: #ddd; font-style: italic; line-height: 1.5; margin-bottom: 5px; border-left: 3px solid var(--gold); padding-left: 10px; }
-.cytat-meta { font-size: 11px; color: var(--muted); font-family: Arial, sans-serif; }
+.cytat-text { font-size: 13px; color: #ddd; font-style: italic; line-height: 1.55; margin-bottom: 5px; border-left: 3px solid var(--gold); padding-left: 10px; }
+.cytat-meta { font-size: 11px; color: var(--muted); }
 .cytat-meta strong { color: #aaa; }
 
-/* NEYMAR UPDATE */
+/* ── NEYMAR ── */
 .neymar-box { padding: 14px; }
-.neymar-headline { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 8px; font-family: Arial, sans-serif; }
+.neymar-headline { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
 .neymar-text { font-size: 12px; color: #aaa; line-height: 1.6; margin-bottom: 8px; }
 .neymar-text strong { color: #ddd; }
 .neymar-text em { color: #bbb; font-style: italic; }
 .neymar-link { font-size: 12px; }
 
-/* FOOTER */
-footer { background: #050508; border-top: 2px solid var(--bdr); text-align: center; padding: 20px; font-size: 12px; color: var(--muted); font-family: Arial, sans-serif; }
-footer a { color: #444; }
+/* ── SZYBKIE LINKI ── */
+.quick-link {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--bdr);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.1s;
+}
+.quick-link:last-child { border-bottom: none; }
+.quick-link:hover { background: #111128; }
+.quick-link span { color: var(--muted); font-size: 12px; }
+.quick-link a { font-weight: 700; }
 
-@media (max-width: 768px) {
+/* ── EKSTRAKLASA MANUAL LINKS ── */
+.ekstra-item {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--bdr);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.1s;
+}
+.ekstra-item:last-child { border-bottom: none; }
+.ekstra-item:hover { background: #111128; }
+.ekstra-item span { color: var(--muted); font-size: 11px; }
+
+/* ── FOOTER ── */
+footer {
+  background: #040408;
+  border-top: 2px solid var(--bdr);
+  text-align: center;
+  padding: 24px;
+  font-size: 12px;
+  color: var(--muted);
+}
+footer a { color: #444; }
+footer a:hover { color: var(--gold); }
+
+/* ── REDDIT POSTY ── */
+.reddit-post { padding: 10px 14px; border-bottom: 1px solid var(--bdr); transition: background 0.1s; }
+.reddit-post:last-child { border-bottom: none; }
+.reddit-post:hover { background: rgba(255,255,255,0.02); }
+.rp-flair { font-size: 10px; color: #ff7744; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.rp-title a { color: #ddd; font-size: 13px; line-height: 1.4; display: block; }
+.rp-title a:hover { color: var(--gold); text-decoration: none; }
+.rp-meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* ── TIFO VIDEOS ── */
+.video-item { padding: 10px 12px; border-bottom: 1px solid var(--bdr); display: flex; gap: 10px; align-items: flex-start; transition: background 0.1s; }
+.video-item:last-child { border-bottom: none; }
+.video-item:hover { background: rgba(255,255,255,0.02); }
+.video-thumb { width: 80px; height: 45px; object-fit: cover; border-radius: 4px; flex-shrink: 0; border: 1px solid var(--bdr); }
+.video-info { flex: 1; min-width: 0; }
+.video-title a { color: #ddd; font-size: 12px; line-height: 1.4; display: block; }
+.video-title a:hover { color: var(--gold); text-decoration: none; }
+.video-date { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+/* ── WESZLO NEWS ── */
+.news-item { padding: 10px 14px; border-bottom: 1px solid var(--bdr); transition: background 0.1s; }
+.news-item:last-child { border-bottom: none; }
+.news-item:hover { background: rgba(255,255,255,0.02); }
+.news-cat { font-size: 10px; color: var(--green); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.news-title { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.news-title a { color: #ddd; font-size: 13px; line-height: 1.4; flex: 1; }
+.news-title a:hover { color: var(--gold); text-decoration: none; }
+.news-date { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+
+/* ── XG TABLE ── */
+.xg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.xg-table .s-header { color: #555; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid var(--bdr); }
+.xg-table th, .xg-table td { padding: 4px 3px; }
+.xg-col { text-align: center; width: 38px; color: #888; font-family: 'Courier New', monospace; font-size: 11px; }
+.xg-pts { color: #88aaff !important; font-weight: 700; }
+.xg-plus { color: var(--green) !important; font-weight: 700; }
+.xg-minus { color: #ff5544 !important; font-weight: 700; }
+.xg-note { font-size: 10px; color: var(--muted); padding: 6px 14px; font-style: italic; border-top: 1px solid var(--bdr); }
+.xg-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .topbar-wrap { grid-template-columns: 1fr 1fr; }
+  .container   { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
   .topbar-wrap { grid-template-columns: 1fr; }
-  .container { grid-template-columns: 1fr; }
-  .logo { font-size: 28px; letter-spacing: 4px; }
+  .logo { letter-spacing: 4px; }
   nav a { padding: 8px 10px; font-size: 10px; }
   .tab-btn { font-size: 10px; padding: 7px 8px; }
+  .scorer-row { grid-template-columns: 20px 1fr 32px; }
+  .sc-team, .sc-assists { display: none; }
 }
 </style>
 </head>
 <body>
 
 <div class="ticker-wrap">
-  <span class="ticker-label">&#9658; LIVE</span>
+  <span class="ticker-label">&#9658; DOBITKA</span>
   <span class="ticker-text">
-    &#9733; DOBITKA &mdash; aktualizacja co 2 godziny &#9733; Champions League &bull; Premier League &bull; La Liga &bull; Serie A &bull; Ligue 1 &bull; Ekstraklasa &#9733; Wyniki, tabele, linki &mdash; bez sciemy &#9733;
+    &#9733; Aktualizacja co 2 godziny &#9733;
+    Champions League &bull; Premier League &bull; La Liga &bull; Serie A &bull; Bundesliga &bull; Ligue 1 &#9733;
+    Wyniki &bull; Tabele &bull; Strzelcy &bull; Terminarz &mdash; bez sciemy &#9733;
   </span>
 </div>
 
 <header>
   <div class="logo">&#9917; DOBITKA</div>
   <div class="tagline">// Pilka. Sport. Bez sciemy. //</div>
-  <div class="updated">Ostatnia aktualizacja: <span>17.03.2026 19:43</span> &nbsp;|&nbsp; Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a></div>
+  <div class="updated">Ostatnia aktualizacja: <span>17.03.2026 20:57</span> &nbsp;|&nbsp;
+    Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a>
+    &nbsp;+&nbsp; <a href="https://www.thesportsdb.com" target="_blank">TheSportsDB</a>
+  </div>
 </header>
 
 <nav>
-  <a href="#dzisiaj">&#128293; Dzisiaj</a>
+  <a href="#live">&#128308; Live</a>
+  <a href="#dzisiaj">&#9654; Dzisiaj</a>
   <a href="#linki">&#128293; Linki</a>
-  <a href="#tabele">&#128202; Tabele &amp; Wyniki</a>
+  <a href="#tabele">&#128202; Tabele</a>
   <a href="#ciekawostki">&#129504; Ciekawostki</a>
-  <a href="#radar">&#128301; Radary</a>
-  <a href="https://www.flashscore.pl" target="_blank">&#9889; Live</a>
+  <a href="#radar">&#128301; Radar</a>
+  <a href="https://www.flashscore.pl" target="_blank">&#9889; Flashscore</a>
 </nav>
+
+<!-- LIVE SECTION (aktualizowany przez JS co 90s) -->
+<div id="live-section" class="hidden" id="live">
+  <div class="box">
+    <div class="box-hdr" style="background:#1a0400;">&#128308; Mecze LIVE <span class="sub">auto-refresh co 90s</span></div>
+    <div class="live-cards" id="live-container">
+      <p class="live-no-match">Ladowanie wynikow live...</p>
+    </div>
+  </div>
+</div>
 
 <!-- TOP BAR: Dzisiaj / Wczoraj / Urodziny -->
 <div class="topbar-wrap" id="dzisiaj">
@@ -223,25 +552,25 @@ footer a { color: #444; }
   <div>
     <div class="box">
       <div class="box-hdr" style="background:#001a10;">&#9654; DZISIAJ W AKCJI <span class="sub">17.03.2026</span></div>
-      <p class="no-data">Dzis brak meczow w obsługiwanych ligach.<br><a href="https://www.flashscore.pl" target="_blank">Flashscore →</a></p>
+      <p class="no-data">Dzis brak meczow w obsługiwanych ligach.<br><a href="https://www.flashscore.pl" target="_blank">Flashscore &#8594;</a></p>
     </div>
   </div>
 
   <div>
     <div class="box">
       <div class="box-hdr" style="background:#1a0a00;">&#9664; WCZORAJSZE WYNIKI <span class="sub">16.03.2026</span></div>
-      <p class="no-data">Brak wynikow z wczoraj w obsługiwanych ligach.<br><a href="https://www.flashscore.pl" target="_blank">Flashscore →</a></p>
+      <p class="no-data">Brak wynikow z wczoraj.<br><a href="https://www.flashscore.pl" target="_blank">Flashscore &#8594;</a></p>
     </div>
   </div>
 
   <div>
     <div class="box">
-      <div class="box-hdr" style="background:#1a001a;">&#127874; URODZINY PILKARZY <span class="sub">dzisiaj (17.03.2026)</span></div>
-      <p class="no-data">Dzis brak znanych urodzin w bazie DOBITKA.<br><small>Baza zawiera ~50 znanych pilkarzy i trenerow.</small></p>
+      <div class="box-hdr" style="background:#1a001a;">&#127874; URODZINY <span class="sub">dzisiaj (17.03.2026)</span></div>
+      <p class="no-data">Dzis brak znanych urodzin w bazie DOBITKA.<br><small>Baza zawiera ~50 pilkarzy i trenerow.</small></p>
     </div>
   </div>
 
-</div><!-- /topbar-wrap -->
+</div>
 
 
 
@@ -250,989 +579,224 @@ footer a { color: #444; }
   <!-- LEWA KOLUMNA -->
   <div>
 
+    <!-- Druzyna dnia (TheSportsDB) -->
+    <div class="box">
+      <div class="box-hdr" style="background:#0d1a0d;">&#127942; DRUZYNA DNIA <span class="sub">TheSportsDB</span></div>
+      <div class="featured-team"><img src="https://r2.thesportsdb.com/images/media/team/badge/vwpvry1467462651.png" alt="Manchester City" class="ft-badge"><div class="ft-info"><div class="ft-name">Manchester City</div><div class="ft-meta"><span>Zalozony: <strong>1880</strong></span> &nbsp;|&nbsp; <span>Stadion: <strong>Etihad Stadium</strong></span></div><p class="ft-desc">Manchester City Football Club is an English football club based in Manchester that competes in the Premier League, the top flight of English football. Founded in 1880 as St. Mark's (West Gorton), it became Ardwick Association Football Club in 1887 and Manchester City in 1894. The club's home ground is the City of Manchester Stadium in east Manchest...</p></div></div>
+    </div>
+
+    <!-- Reddit r/soccer — swieze newsy ze spolecznosci -->
+    <div class="box">
+      <div class="box-hdr" style="background:#1a0800;">&#128172; Z Internetu &#8212; r/soccer <span class="sub">Reddit</span></div>
+      <p class="no-data">Brak danych z Reddit.</p>
+      <div style="text-align:right;padding:6px 14px;font-size:11px;color:var(--muted);">
+        <a href="https://reddit.com/r/soccer" target="_blank">r/soccer &#8594;</a>
+      </div>
+    </div>
+
+    <!-- Gorace linki -->
     <div class="box" id="linki">
       <div class="box-hdr">&#128293; Gorace Linki <span class="sub">wybrane przez redakcje</span></div>
-      <div class="link-item">
-          <div class="link-cat ucl">Liga Mistrzów</div>
-          <div class="link-title"><a href="https://www.uefa.com/uefachampionsleague/" target="_blank">Champions League — terminarz, wyniki, tabela</a></div>
-          <div class="link-desc">Faza pucharowa UCL to najpiękniejsze 90 minut w kalendarzu kibiców — lub najgorsze, jeśli grasz o awans z jednobramkową zaliczką. Pełny terminarz i wyniki na stronie UEFA.</div>
-          <div class="link-source">&#9658; UEFA.com</div>
-        </div>
-<div class="link-item">
-          <div class="link-cat laliga">La Liga</div>
-          <div class="link-title"><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Yamal vs Vinicius — młodość kontra doświadczenie, Barceloneta kontra Bernabéu</a></div>
-          <div class="link-desc">Klasico w tym sezonie to osobny gatunek dramaturgii. Kompletne statystyki zawodników i drużyn La Ligi na FBref — jeśli liczby są twoją miłością.</div>
-          <div class="link-source">&#9658; FBref.com</div>
-        </div>
-<div class="link-item">
-          <div class="link-cat pl">Premier League</div>
-          <div class="link-title"><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Premier League — gdzie kupują za miliardy, gdzie grają na wynik</a></div>
-          <div class="link-desc">Liga z największymi budżetami świata i najlepszą atmosferą. Statystyki, xG, pressowanie — wszystko co trzeba na FBref.</div>
-          <div class="link-source">&#9658; FBref.com</div>
-        </div>
-<div class="link-item">
-          <div class="link-cat ekstraklasa">Ekstraklasa</div>
-          <div class="link-title"><a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Ekstraklasa — bo warto wiedzieć co u sąsiadów słychać</a></div>
-          <div class="link-desc">Polska liga ma swoje uroki — niespodzianki, derby i od czasu do czasu piłkę, którą naprawdę warto obejrzeć. Wyniki i tabela na żywo.</div>
-          <div class="link-source">&#9658; Sofascore</div>
-        </div>
-<div class="link-item">
-          <div class="link-cat ">Transfery</div>
-          <div class="link-title"><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt — ile naprawdę wart jest twój ulubiony zawodnik?</a></div>
-          <div class="link-desc">Biblia wycen piłkarskich. Sprawdzasz czy nowy nabytek twojego klubu jest warty tyle co za niego zapłacono — Transfermarkt nie kłamie (przynajmniej nie bardziej niż agenci).</div>
-          <div class="link-source">&#9658; Transfermarkt.pl</div>
-        </div>
+      <div class="link-item"><div class="link-cat ucl">Liga Mistrzow</div><div class="link-title"><a href="https://www.uefa.com/uefachampionsleague/" target="_blank">Champions League — terminarz, wyniki, tabela</a></div><div class="link-desc">Faza pucharowa UCL to najpiękniejsze 90 minut w kalendarzu kibicow — lub najgorsze, jesli grasz o awans z jednobramkowa zaliczka. Pelny terminarz i wyniki na stronie UEFA.</div><div class="link-source">&#9658; UEFA.com</div></div>
+<div class="link-item"><div class="link-cat laliga">La Liga</div><div class="link-title"><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Yamal vs Vinicius — mlodosc kontra doswiadczenie</a></div><div class="link-desc">Klasico w tym sezonie to osobny gatunek dramaturgii. Kompletne statystyki zawodnikow i druzyn La Ligi na FBref — jesli liczby sa twoja miloscia.</div><div class="link-source">&#9658; FBref.com</div></div>
+<div class="link-item"><div class="link-cat pl">Premier League</div><div class="link-title"><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Premier League — gdzie kupuja za miliardy, gdzie graja na wynik</a></div><div class="link-desc">Liga z najwiekszymi budzetami swiata i najlepsza atmosfera. Statystyki, xG, pressowanie — wszystko co trzeba na FBref.</div><div class="link-source">&#9658; FBref.com</div></div>
+<div class="link-item"><div class="link-cat bundesliga">Bundesliga</div><div class="link-title"><a href="https://fbref.com/en/comps/20/Bundesliga-Stats" target="_blank">Bundesliga — Bayern wciaz gora, reszta goni</a></div><div class="link-desc">Rekord Lewandowskiego (41 goli), Xabi Alonso i Leverkusen bez porazki — Bundesliga potrafi zaskoczyc. Pelne statystyki na FBref.</div><div class="link-source">&#9658; FBref.com</div></div>
+<div class="link-item"><div class="link-cat ">Transfery</div><div class="link-title"><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt — ile naprawde wart jest twoj ulubiony zawodnik?</a></div><div class="link-desc">Biblia wycen pilkarskich. Sprawdzasz czy nowy nabytek twojego klubu jest wart tyle co za niego zaplacono.</div><div class="link-source">&#9658; Transfermarkt.pl</div></div>
 
     </div>
 
-    <!-- TABELE I WYNIKI — ZAKŁADKI -->
+    <!-- Tabele, strzelcy, wyniki — zakładki ligowe -->
     <div class="box" id="tabele">
-      <div class="box-hdr">&#128202; Tabele, Wyniki &amp; Terminarz <span class="sub">football-data.org</span></div>
+      <div class="box-hdr">&#128202; Tabele &amp; Wyniki <span class="sub">football-data.org</span></div>
       <div class="tab-btns">
-        <button class="tab-btn active" onclick="showTab('PL')">&#127988; Premier League</button>
-<button class="tab-btn" onclick="showTab('PD')">&#127466;&#127480; La Liga</button>
-<button class="tab-btn" onclick="showTab('SA')">&#127470;&#127481; Serie A</button>
-<button class="tab-btn" onclick="showTab('FL1')">&#127467;&#127479; Ligue 1</button>
-<button class="tab-btn" onclick="showTab('CL')">&#11088; Champions League</button>
-<button class="tab-btn" onclick="showTab('PPL')">&#127477;&#127473; Ekstraklasa</button>
+        <button class="tab-btn active" data-code="CL" onclick="showTab('CL')">Champions League</button>
+<button class="tab-btn" data-code="PL" onclick="showTab('PL')">Premier League</button>
+<button class="tab-btn" data-code="PD" onclick="showTab('PD')">La Liga</button>
+<button class="tab-btn" data-code="SA" onclick="showTab('SA')">Serie A</button>
+<button class="tab-btn" data-code="BL1" onclick="showTab('BL1')">Bundesliga</button>
+<button class="tab-btn" data-code="FL1" onclick="showTab('FL1')">Ligue 1</button>
 
       </div>
-      <div class="tab-pane" id="tab-PL">
-          <div class="tab-league-title">&#127988; Premier League</div>
-          <table class="standings-table">
-      <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
-        <th class="s-num">M</th><th class="s-num">W</th>
-        <th class="s-num">R</th><th class="s-num">L</th>
-        <th class="s-num">RB</th><th class="s-pts">PKT</th>
-      </tr>
-      <tr style="color:#00cc55">
-          <td class="s-pos">1</td>
-          <td class="s-team">Arsenal</td>
-          <td class="s-num">31</td><td class="s-num">21</td>
-          <td class="s-num">7</td><td class="s-num">3</td>
-          <td class="s-num s-gd">+39</td>
-          <td class="s-pts">70</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">2</td>
-          <td class="s-team">Man City</td>
-          <td class="s-num">30</td><td class="s-num">18</td>
-          <td class="s-num">7</td><td class="s-num">5</td>
-          <td class="s-num s-gd">+32</td>
-          <td class="s-pts">61</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">3</td>
-          <td class="s-team">Man United</td>
-          <td class="s-num">30</td><td class="s-num">15</td>
-          <td class="s-num">9</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+13</td>
-          <td class="s-pts">54</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">4</td>
-          <td class="s-team">Aston Villa</td>
-          <td class="s-num">30</td><td class="s-num">15</td>
-          <td class="s-num">6</td><td class="s-num">9</td>
-          <td class="s-num s-gd">+3</td>
-          <td class="s-pts">51</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">5</td>
-          <td class="s-team">Liverpool</td>
-          <td class="s-num">30</td><td class="s-num">14</td>
-          <td class="s-num">7</td><td class="s-num">9</td>
-          <td class="s-num s-gd">+9</td>
-          <td class="s-pts">49</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">6</td>
-          <td class="s-team">Chelsea</td>
-          <td class="s-num">30</td><td class="s-num">13</td>
-          <td class="s-num">9</td><td class="s-num">8</td>
-          <td class="s-num s-gd">+18</td>
-          <td class="s-pts">48</td>
-        </tr>
-<tr >
-          <td class="s-pos">7</td>
-          <td class="s-team">Brentford</td>
-          <td class="s-num">30</td><td class="s-num">13</td>
-          <td class="s-num">6</td><td class="s-num">11</td>
-          <td class="s-num s-gd">+4</td>
-          <td class="s-pts">45</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">8</td>
-          <td class="s-team">Everton</td>
-          <td class="s-num">30</td><td class="s-num">12</td>
-          <td class="s-num">7</td><td class="s-num">11</td>
-          <td class="s-num s-gd">-1</td>
-          <td class="s-pts">43</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">9</td>
-          <td class="s-team">Newcastle</td>
-          <td class="s-num">30</td><td class="s-num">12</td>
-          <td class="s-num">6</td><td class="s-num">12</td>
-          <td class="s-num s-gd">0</td>
-          <td class="s-pts">42</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">10</td>
-          <td class="s-team">Bournemouth</td>
-          <td class="s-num">30</td><td class="s-num">9</td>
-          <td class="s-num">14</td><td class="s-num">7</td>
-          <td class="s-num s-gd">-2</td>
-          <td class="s-pts">41</td>
-        </tr>
-
-    </table>
-          <div class="subsection-title">Ostatnie wyniki</div>
-          <div class="result-row">
-          <span class="r-home">Wolverhampton</span>
-          <span class="r-score win-a">0:4</span>
-          <span class="r-away">Man City</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Tottenham</span>
-          <span class="r-score win-h">3:0</span>
-          <span class="r-away">Burnley</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Sunderland</span>
-          <span class="r-score win-h">3:0</span>
-          <span class="r-away">West Ham</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Brighton Hove</span>
-          <span class="r-score draw">1:1</span>
-          <span class="r-away">Fulham</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Aston Villa</span>
-          <span class="r-score draw">0:0</span>
-          <span class="r-away">Newcastle</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Liverpool</span>
-          <span class="r-score win-h">4:2</span>
-          <span class="r-away">Bournemouth</span>
-        </div>
-
-          <div class="subsection-title">Najblizsze mecze</div>
-          <div class="upcoming-row">
-          <span class="u-home">Bournemouth</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Man United</span>
-          <span class="u-time">20.03 21:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Brighton Hove</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Liverpool</span>
-          <span class="u-time">21.03 13:30</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Fulham</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Burnley</span>
-          <span class="u-time">21.03 16:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Everton</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Chelsea</span>
-          <span class="u-time">21.03 18:30</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Leeds United</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Brentford</span>
-          <span class="u-time">21.03 21:00</span>
-        </div>
-
-        </div>
-<div class="tab-pane" id="tab-PD">
-          <div class="tab-league-title">&#127466;&#127480; La Liga</div>
-          <table class="standings-table">
-      <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
-        <th class="s-num">M</th><th class="s-num">W</th>
-        <th class="s-num">R</th><th class="s-num">L</th>
-        <th class="s-num">RB</th><th class="s-pts">PKT</th>
-      </tr>
-      <tr style="color:#00cc55">
-          <td class="s-pos">1</td>
-          <td class="s-team">Barça</td>
-          <td class="s-num">28</td><td class="s-num">23</td>
-          <td class="s-num">1</td><td class="s-num">4</td>
-          <td class="s-num s-gd">+49</td>
-          <td class="s-pts">70</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">2</td>
-          <td class="s-team">Real Madrid</td>
-          <td class="s-num">28</td><td class="s-num">21</td>
-          <td class="s-num">3</td><td class="s-num">4</td>
-          <td class="s-num s-gd">+36</td>
-          <td class="s-pts">66</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">3</td>
-          <td class="s-team">Atleti</td>
-          <td class="s-num">28</td><td class="s-num">17</td>
-          <td class="s-num">6</td><td class="s-num">5</td>
-          <td class="s-num s-gd">+22</td>
-          <td class="s-pts">57</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">4</td>
-          <td class="s-team">Villarreal</td>
-          <td class="s-num">28</td><td class="s-num">17</td>
-          <td class="s-num">4</td><td class="s-num">7</td>
-          <td class="s-num s-gd">+18</td>
-          <td class="s-pts">55</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">5</td>
-          <td class="s-team">Real Betis</td>
-          <td class="s-num">28</td><td class="s-num">11</td>
-          <td class="s-num">11</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+8</td>
-          <td class="s-pts">44</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">6</td>
-          <td class="s-team">Celta</td>
-          <td class="s-num">28</td><td class="s-num">10</td>
-          <td class="s-num">11</td><td class="s-num">7</td>
-          <td class="s-num s-gd">+7</td>
-          <td class="s-pts">41</td>
-        </tr>
-<tr >
-          <td class="s-pos">7</td>
-          <td class="s-team">Real Sociedad</td>
-          <td class="s-num">28</td><td class="s-num">10</td>
-          <td class="s-num">8</td><td class="s-num">10</td>
-          <td class="s-num s-gd">+1</td>
-          <td class="s-pts">38</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">8</td>
-          <td class="s-team">Espanyol</td>
-          <td class="s-num">28</td><td class="s-num">10</td>
-          <td class="s-num">7</td><td class="s-num">11</td>
-          <td class="s-num s-gd">-7</td>
-          <td class="s-pts">37</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">9</td>
-          <td class="s-team">Getafe</td>
-          <td class="s-num">28</td><td class="s-num">10</td>
-          <td class="s-num">5</td><td class="s-num">13</td>
-          <td class="s-num s-gd">-7</td>
-          <td class="s-pts">35</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">10</td>
-          <td class="s-team">Athletic</td>
-          <td class="s-num">28</td><td class="s-num">10</td>
-          <td class="s-num">5</td><td class="s-num">13</td>
-          <td class="s-num s-gd">-10</td>
-          <td class="s-pts">35</td>
-        </tr>
-
-    </table>
-          <div class="subsection-title">Ostatnie wyniki</div>
-          <div class="result-row">
-          <span class="r-home">Celta</span>
-          <span class="r-score win-a">0:2</span>
-          <span class="r-away">Getafe</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Valencia</span>
-          <span class="r-score draw">1:1</span>
-          <span class="r-away">Real Sociedad</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Alavés</span>
-          <span class="r-score win-h">2:1</span>
-          <span class="r-away">Levante</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Mallorca</span>
-          <span class="r-score win-a">0:3</span>
-          <span class="r-away">Barça</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Villarreal</span>
-          <span class="r-score win-h">2:0</span>
-          <span class="r-away">Real Oviedo</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Girona</span>
-          <span class="r-score win-a">1:3</span>
-          <span class="r-away">Rayo Vallecano</span>
-        </div>
-
-          <div class="subsection-title">Najblizsze mecze</div>
-          <div class="upcoming-row">
-          <span class="u-home">Villarreal</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Real Sociedad</span>
-          <span class="u-time">20.03 21:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Elche</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Mallorca</span>
-          <span class="u-time">21.03 14:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Espanyol</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Getafe</span>
-          <span class="u-time">21.03 16:15</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Levante</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Real Oviedo</span>
-          <span class="u-time">21.03 18:30</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Osasuna</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Girona</span>
-          <span class="u-time">21.03 18:30</span>
-        </div>
-
-        </div>
-<div class="tab-pane" id="tab-SA">
-          <div class="tab-league-title">&#127470;&#127481; Serie A</div>
-          <table class="standings-table">
-      <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
-        <th class="s-num">M</th><th class="s-num">W</th>
-        <th class="s-num">R</th><th class="s-num">L</th>
-        <th class="s-num">RB</th><th class="s-pts">PKT</th>
-      </tr>
-      <tr style="color:#00cc55">
-          <td class="s-pos">1</td>
-          <td class="s-team">Inter</td>
-          <td class="s-num">29</td><td class="s-num">22</td>
-          <td class="s-num">2</td><td class="s-num">5</td>
-          <td class="s-num s-gd">+42</td>
-          <td class="s-pts">68</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">2</td>
-          <td class="s-team">Milan</td>
-          <td class="s-num">29</td><td class="s-num">17</td>
-          <td class="s-num">9</td><td class="s-num">3</td>
-          <td class="s-num s-gd">+23</td>
-          <td class="s-pts">60</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">3</td>
-          <td class="s-team">Napoli</td>
-          <td class="s-num">29</td><td class="s-num">18</td>
-          <td class="s-num">5</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+15</td>
-          <td class="s-pts">59</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">4</td>
-          <td class="s-team">Como 1907</td>
-          <td class="s-num">29</td><td class="s-num">15</td>
-          <td class="s-num">9</td><td class="s-num">5</td>
-          <td class="s-num s-gd">+26</td>
-          <td class="s-pts">54</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">5</td>
-          <td class="s-team">Juventus</td>
-          <td class="s-num">29</td><td class="s-num">15</td>
-          <td class="s-num">8</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+23</td>
-          <td class="s-pts">53</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">6</td>
-          <td class="s-team">Roma</td>
-          <td class="s-num">29</td><td class="s-num">16</td>
-          <td class="s-num">3</td><td class="s-num">10</td>
-          <td class="s-num s-gd">+16</td>
-          <td class="s-pts">51</td>
-        </tr>
-<tr >
-          <td class="s-pos">7</td>
-          <td class="s-team">Atalanta</td>
-          <td class="s-num">29</td><td class="s-num">12</td>
-          <td class="s-num">11</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+13</td>
-          <td class="s-pts">47</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">8</td>
-          <td class="s-team">Bologna</td>
-          <td class="s-num">29</td><td class="s-num">12</td>
-          <td class="s-num">6</td><td class="s-num">11</td>
-          <td class="s-num s-gd">+4</td>
-          <td class="s-pts">42</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">9</td>
-          <td class="s-team">Lazio</td>
-          <td class="s-num">29</td><td class="s-num">10</td>
-          <td class="s-num">10</td><td class="s-num">9</td>
-          <td class="s-num s-gd">+1</td>
-          <td class="s-pts">40</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">10</td>
-          <td class="s-team">Sassuolo</td>
-          <td class="s-num">29</td><td class="s-num">11</td>
-          <td class="s-num">5</td><td class="s-num">13</td>
-          <td class="s-num s-gd">-4</td>
-          <td class="s-pts">38</td>
-        </tr>
-
-    </table>
-          <div class="subsection-title">Ostatnie wyniki</div>
-          <div class="result-row">
-          <span class="r-home">Como 1907</span>
-          <span class="r-score win-h">2:0</span>
-          <span class="r-away">Lazio</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Cagliari</span>
-          <span class="r-score draw">1:1</span>
-          <span class="r-away">Fiorentina</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Roma</span>
-          <span class="r-score win-h">1:0</span>
-          <span class="r-away">Bologna</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Milan</span>
-          <span class="r-score win-a">1:2</span>
-          <span class="r-away">Cremonese</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Sassuolo</span>
-          <span class="r-score win-a">0:2</span>
-          <span class="r-away">Napoli</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Genoa</span>
-          <span class="r-score draw">0:0</span>
-          <span class="r-away">Lecce</span>
-        </div>
-
-          <div class="subsection-title">Najblizsze mecze</div>
-          <div class="upcoming-row">
-          <span class="u-home">Cagliari</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Napoli</span>
-          <span class="u-time">20.03 18:30</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Genoa</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Udinese</span>
-          <span class="u-time">20.03 20:45</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Parma</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Cremonese</span>
-          <span class="u-time">21.03 15:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Milan</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Torino</span>
-          <span class="u-time">21.03 18:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Juventus</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Sassuolo</span>
-          <span class="u-time">21.03 20:45</span>
-        </div>
-
-        </div>
-<div class="tab-pane" id="tab-FL1">
-          <div class="tab-league-title">&#127467;&#127479; Ligue 1</div>
-          <table class="standings-table">
-      <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
-        <th class="s-num">M</th><th class="s-num">W</th>
-        <th class="s-num">R</th><th class="s-num">L</th>
-        <th class="s-num">RB</th><th class="s-pts">PKT</th>
-      </tr>
-      <tr style="color:#00cc55">
-          <td class="s-pos">1</td>
-          <td class="s-team">PSG</td>
-          <td class="s-num">25</td><td class="s-num">18</td>
-          <td class="s-num">3</td><td class="s-num">4</td>
-          <td class="s-num s-gd">+32</td>
-          <td class="s-pts">57</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">2</td>
-          <td class="s-team">RC Lens</td>
-          <td class="s-num">26</td><td class="s-num">18</td>
-          <td class="s-num">2</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+26</td>
-          <td class="s-pts">56</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">3</td>
-          <td class="s-team">Marseille</td>
-          <td class="s-num">26</td><td class="s-num">15</td>
-          <td class="s-num">4</td><td class="s-num">7</td>
-          <td class="s-num s-gd">+20</td>
-          <td class="s-pts">49</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">4</td>
-          <td class="s-team">Olympique Lyon</td>
-          <td class="s-num">26</td><td class="s-num">14</td>
-          <td class="s-num">5</td><td class="s-num">7</td>
-          <td class="s-num s-gd">+13</td>
-          <td class="s-pts">47</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">5</td>
-          <td class="s-team">Lille</td>
-          <td class="s-num">26</td><td class="s-num">13</td>
-          <td class="s-num">5</td><td class="s-num">8</td>
-          <td class="s-num s-gd">+7</td>
-          <td class="s-pts">44</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">6</td>
-          <td class="s-team">Monaco</td>
-          <td class="s-num">26</td><td class="s-num">13</td>
-          <td class="s-num">4</td><td class="s-num">9</td>
-          <td class="s-num s-gd">+8</td>
-          <td class="s-pts">43</td>
-        </tr>
-<tr >
-          <td class="s-pos">7</td>
-          <td class="s-team">Stade Rennais</td>
-          <td class="s-num">26</td><td class="s-num">12</td>
-          <td class="s-num">7</td><td class="s-num">7</td>
-          <td class="s-num s-gd">+6</td>
-          <td class="s-pts">43</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">8</td>
-          <td class="s-team">Strasbourg</td>
-          <td class="s-num">26</td><td class="s-num">10</td>
-          <td class="s-num">7</td><td class="s-num">9</td>
-          <td class="s-num s-gd">+9</td>
-          <td class="s-pts">37</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">9</td>
-          <td class="s-team">Lorient</td>
-          <td class="s-num">26</td><td class="s-num">9</td>
-          <td class="s-num">10</td><td class="s-num">7</td>
-          <td class="s-num s-gd">-3</td>
-          <td class="s-pts">37</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">10</td>
-          <td class="s-team">Brest</td>
-          <td class="s-num">26</td><td class="s-num">10</td>
-          <td class="s-num">6</td><td class="s-num">10</td>
-          <td class="s-num s-gd">-2</td>
-          <td class="s-pts">36</td>
-        </tr>
-
-    </table>
-          <div class="subsection-title">Ostatnie wyniki</div>
-          <div class="result-row">
-          <span class="r-home">Auxerre</span>
-          <span class="r-score win-h">1:0</span>
-          <span class="r-away">Lorient</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Brest</span>
-          <span class="r-score draw">3:3</span>
-          <span class="r-away">Lille</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Nice</span>
-          <span class="r-score win-a">0:1</span>
-          <span class="r-away">Toulouse</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Monaco</span>
-          <span class="r-score win-h">3:1</span>
-          <span class="r-away">Le Havre</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">RC Lens</span>
-          <span class="r-score win-a">0:1</span>
-          <span class="r-away">Olympique Lyon</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Stade Rennais</span>
-          <span class="r-score win-h">1:0</span>
-          <span class="r-away">Marseille</span>
-        </div>
-
-          <div class="subsection-title">Najblizsze mecze</div>
-          <div class="upcoming-row">
-          <span class="u-home">RC Lens</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Angers SCO</span>
-          <span class="u-time">20.03 20:45</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Toulouse</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Lorient</span>
-          <span class="u-time">21.03 17:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Auxerre</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Brest</span>
-          <span class="u-time">21.03 19:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Nice</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">PSG</span>
-          <span class="u-time">21.03 21:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Olympique Lyon</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Monaco</span>
-          <span class="u-time">22.03 15:00</span>
-        </div>
-
-        </div>
-<div class="tab-pane" id="tab-CL">
-          <div class="tab-league-title">&#11088; Champions League</div>
-          <table class="standings-table">
-      <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
-        <th class="s-num">M</th><th class="s-num">W</th>
-        <th class="s-num">R</th><th class="s-num">L</th>
-        <th class="s-num">RB</th><th class="s-pts">PKT</th>
-      </tr>
-      <tr style="color:#00cc55">
-          <td class="s-pos">1</td>
-          <td class="s-team">Arsenal</td>
-          <td class="s-num">8</td><td class="s-num">8</td>
-          <td class="s-num">0</td><td class="s-num">0</td>
-          <td class="s-num s-gd">+19</td>
-          <td class="s-pts">24</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">2</td>
-          <td class="s-team">Bayern</td>
-          <td class="s-num">8</td><td class="s-num">7</td>
-          <td class="s-num">0</td><td class="s-num">1</td>
-          <td class="s-num s-gd">+14</td>
-          <td class="s-pts">21</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">3</td>
-          <td class="s-team">Liverpool</td>
-          <td class="s-num">8</td><td class="s-num">6</td>
-          <td class="s-num">0</td><td class="s-num">2</td>
-          <td class="s-num s-gd">+12</td>
-          <td class="s-pts">18</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">4</td>
-          <td class="s-team">Tottenham</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">2</td><td class="s-num">1</td>
-          <td class="s-num s-gd">+10</td>
-          <td class="s-pts">17</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">5</td>
-          <td class="s-team">Barça</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">1</td><td class="s-num">2</td>
-          <td class="s-num s-gd">+8</td>
-          <td class="s-pts">16</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">6</td>
-          <td class="s-team">Chelsea</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">1</td><td class="s-num">2</td>
-          <td class="s-num s-gd">+7</td>
-          <td class="s-pts">16</td>
-        </tr>
-<tr >
-          <td class="s-pos">7</td>
-          <td class="s-team">Sporting CP</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">1</td><td class="s-num">2</td>
-          <td class="s-num s-gd">+6</td>
-          <td class="s-pts">16</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">8</td>
-          <td class="s-team">Man City</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">1</td><td class="s-num">2</td>
-          <td class="s-num s-gd">+6</td>
-          <td class="s-pts">16</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">9</td>
-          <td class="s-team">Real Madrid</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">0</td><td class="s-num">3</td>
-          <td class="s-num s-gd">+9</td>
-          <td class="s-pts">15</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">10</td>
-          <td class="s-team">Inter</td>
-          <td class="s-num">8</td><td class="s-num">5</td>
-          <td class="s-num">0</td><td class="s-num">3</td>
-          <td class="s-num s-gd">+8</td>
-          <td class="s-pts">15</td>
-        </tr>
-
-    </table>
-          <div class="subsection-title">Ostatnie wyniki</div>
-          <div class="result-row">
-          <span class="r-home">Real Madrid</span>
-          <span class="r-score win-h">2:1</span>
-          <span class="r-away">Marseille</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Tottenham</span>
-          <span class="r-score win-h">1:0</span>
-          <span class="r-away">Villarreal</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">SL Benfica</span>
-          <span class="r-score win-a">2:3</span>
-          <span class="r-away">Qarabağ Ağdam</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Juventus</span>
-          <span class="r-score draw">4:4</span>
-          <span class="r-away">Dortmund</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">PSV</span>
-          <span class="r-score win-a">1:3</span>
-          <span class="r-away">Union SG</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Athletic</span>
-          <span class="r-score win-a">0:2</span>
-          <span class="r-away">Arsenal</span>
-        </div>
-
-          <div class="subsection-title">Najblizsze mecze</div>
-          <div class="upcoming-row">
-          <span class="u-home">Chelsea</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">PSG</span>
-          <span class="u-time">17.03 21:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Man City</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Real Madrid</span>
-          <span class="u-time">17.03 21:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Arsenal</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Leverkusen</span>
-          <span class="u-time">17.03 21:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Barça</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Newcastle</span>
-          <span class="u-time">18.03 18:45</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Liverpool</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Galatasaray</span>
-          <span class="u-time">18.03 21:00</span>
-        </div>
-
-        </div>
-<div class="tab-pane" id="tab-PPL">
-          <div class="tab-league-title">&#127477;&#127473; Ekstraklasa</div>
-          <table class="standings-table">
-      <tr class="s-header">
-        <th class="s-pos">#</th><th class="s-team">Druzyna</th>
-        <th class="s-num">M</th><th class="s-num">W</th>
-        <th class="s-num">R</th><th class="s-num">L</th>
-        <th class="s-num">RB</th><th class="s-pts">PKT</th>
-      </tr>
-      <tr style="color:#00cc55">
-          <td class="s-pos">1</td>
-          <td class="s-team">Porto</td>
-          <td class="s-num">26</td><td class="s-num">22</td>
-          <td class="s-num">3</td><td class="s-num">1</td>
-          <td class="s-num s-gd">+42</td>
-          <td class="s-pts">69</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">2</td>
-          <td class="s-team">Sporting CP</td>
-          <td class="s-num">25</td><td class="s-num">19</td>
-          <td class="s-num">5</td><td class="s-num">1</td>
-          <td class="s-num s-gd">+50</td>
-          <td class="s-pts">62</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">3</td>
-          <td class="s-team">SL Benfica</td>
-          <td class="s-num">26</td><td class="s-num">18</td>
-          <td class="s-num">8</td><td class="s-num">0</td>
-          <td class="s-num s-gd">+38</td>
-          <td class="s-pts">62</td>
-        </tr>
-<tr style="color:#00cc55">
-          <td class="s-pos">4</td>
-          <td class="s-team">Braga</td>
-          <td class="s-num">25</td><td class="s-num">13</td>
-          <td class="s-num">7</td><td class="s-num">5</td>
-          <td class="s-num s-gd">+27</td>
-          <td class="s-pts">46</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">5</td>
-          <td class="s-team">Gil Vicente</td>
-          <td class="s-num">26</td><td class="s-num">11</td>
-          <td class="s-num">9</td><td class="s-num">6</td>
-          <td class="s-num s-gd">+12</td>
-          <td class="s-pts">42</td>
-        </tr>
-<tr style="color:#ffaa44">
-          <td class="s-pos">6</td>
-          <td class="s-team">Famalicão</td>
-          <td class="s-num">26</td><td class="s-num">12</td>
-          <td class="s-num">6</td><td class="s-num">8</td>
-          <td class="s-num s-gd">+10</td>
-          <td class="s-pts">42</td>
-        </tr>
-<tr >
-          <td class="s-pos">7</td>
-          <td class="s-team">Estoril Praia</td>
-          <td class="s-num">26</td><td class="s-num">10</td>
-          <td class="s-num">7</td><td class="s-num">9</td>
-          <td class="s-num s-gd">+5</td>
-          <td class="s-pts">37</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">8</td>
-          <td class="s-team">Moreirense</td>
-          <td class="s-num">26</td><td class="s-num">10</td>
-          <td class="s-num">5</td><td class="s-num">11</td>
-          <td class="s-num s-gd">-7</td>
-          <td class="s-pts">35</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">9</td>
-          <td class="s-team">Vitória SC</td>
-          <td class="s-num">26</td><td class="s-num">9</td>
-          <td class="s-num">5</td><td class="s-num">12</td>
-          <td class="s-num s-gd">-10</td>
-          <td class="s-pts">32</td>
-        </tr>
-<tr style="color:#ff5544">
-          <td class="s-pos">10</td>
-          <td class="s-team">Alverca</td>
-          <td class="s-num">26</td><td class="s-num">7</td>
-          <td class="s-num">8</td><td class="s-num">11</td>
-          <td class="s-num s-gd">-15</td>
-          <td class="s-pts">29</td>
-        </tr>
-
-    </table>
-          <div class="subsection-title">Ostatnie wyniki</div>
-          <div class="result-row">
-          <span class="r-home">Moreirense</span>
-          <span class="r-score win-h">2:1</span>
-          <span class="r-away">Alverca</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Braga</span>
-          <span class="r-score win-h">3:0</span>
-          <span class="r-away">Tondela</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Famalicão</span>
-          <span class="r-score win-h">3:0</span>
-          <span class="r-away">Santa Clara</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Arouca</span>
-          <span class="r-score win-h">3:1</span>
-          <span class="r-away">AVS</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">CD Nacional</span>
-          <span class="r-score win-a">0:2</span>
-          <span class="r-away">Gil Vicente</span>
-        </div>
-<div class="result-row">
-          <span class="r-home">Casa Pia</span>
-          <span class="r-score win-a">0:2</span>
-          <span class="r-away">Sporting CP</span>
-        </div>
-
-          <div class="subsection-title">Najblizsze mecze</div>
-          <div class="upcoming-row">
-          <span class="u-home">Amadora</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Casa Pia</span>
-          <span class="u-time">20.03 21:15</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Moreirense</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Arouca</span>
-          <span class="u-time">21.03 16:30</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Famalicão</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">CD Nacional</span>
-          <span class="u-time">21.03 16:30</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">Santa Clara</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Gil Vicente</span>
-          <span class="u-time">21.03 19:00</span>
-        </div>
-<div class="upcoming-row">
-          <span class="u-home">SL Benfica</span>
-          <span class="u-vs">vs</span>
-          <span class="u-away">Vitória SC</span>
-          <span class="u-time">21.03 19:00</span>
-        </div>
-
-        </div>
+      <div class="tab-pane" id="tab-CL"><div class="tab-league-title">Champions League</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">Arsenal</td><td class="s-num">8</td><td class="s-num">8</td><td class="s-num">0</td><td class="s-num">0</td><td class="s-num s-gd">+19</td><td class="s-pts">24</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">Bayern</td><td class="s-num">8</td><td class="s-num">7</td><td class="s-num">0</td><td class="s-num">1</td><td class="s-num s-gd">+14</td><td class="s-pts">21</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Liverpool</td><td class="s-num">8</td><td class="s-num">6</td><td class="s-num">0</td><td class="s-num">2</td><td class="s-num s-gd">+12</td><td class="s-pts">18</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Tottenham</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">2</td><td class="s-num">1</td><td class="s-num s-gd">+10</td><td class="s-pts">17</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">Barça</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">1</td><td class="s-num">2</td><td class="s-num s-gd">+8</td><td class="s-pts">16</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Chelsea</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">1</td><td class="s-num">2</td><td class="s-num s-gd">+7</td><td class="s-pts">16</td></tr>
+<tr ><td class="s-pos">7</td><td class="s-team">Sporting CP</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">1</td><td class="s-num">2</td><td class="s-num s-gd">+6</td><td class="s-pts">16</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Man City</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">1</td><td class="s-num">2</td><td class="s-num s-gd">+6</td><td class="s-pts">16</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Real Madrid</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">0</td><td class="s-num">3</td><td class="s-num s-gd">+9</td><td class="s-pts">15</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Inter</td><td class="s-num">8</td><td class="s-num">5</td><td class="s-num">0</td><td class="s-num">3</td><td class="s-num s-gd">+8</td><td class="s-pts">15</td></tr>
+</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Kylian Mbappé</span><span class="sc-team">Real Madrid</span><span class="sc-goals">13</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Anthony Gordon</span><span class="sc-team">Newcastle</span><span class="sc-goals">10</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Harry Kane</span><span class="sc-team">Bayern</span><span class="sc-goals">8</span><span class="sc-assists">+0a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Erling Haaland</span><span class="sc-team">Man City</span><span class="sc-goals">7</span><span class="sc-assists">+0a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Victor Osimhen</span><span class="sc-team">Galatasaray</span><span class="sc-goals">7</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Julián Álvarez</span><span class="sc-team">Atleti</span><span class="sc-goals">7</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Martinelli</span><span class="sc-team">Arsenal</span><span class="sc-goals">6</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Khvicha Kvaratskhelia</span><span class="sc-team">PSG</span><span class="sc-goals">6</span><span class="sc-assists">+4a</span></div>
+</div><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Real Madrid</span><span class="r-score win-h">2:1</span><span class="r-away">Marseille</span></div>
+<div class="result-row"><span class="r-home">Tottenham</span><span class="r-score win-h">1:0</span><span class="r-away">Villarreal</span></div>
+<div class="result-row"><span class="r-home">SL Benfica</span><span class="r-score win-a">2:3</span><span class="r-away">Qarabağ Ağdam</span></div>
+<div class="result-row"><span class="r-home">Juventus</span><span class="r-score draw">4:4</span><span class="r-away">Dortmund</span></div>
+<div class="result-row"><span class="r-home">PSV</span><span class="r-score win-a">1:3</span><span class="r-away">Union SG</span></div>
+<div class="result-row"><span class="r-home">Athletic</span><span class="r-score win-a">0:2</span><span class="r-away">Arsenal</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">Chelsea</span><span class="u-vs">vs</span><span class="u-away">PSG</span><span class="u-time">17.03 21:00</span></div>
+<div class="upcoming-row"><span class="u-home">Man City</span><span class="u-vs">vs</span><span class="u-away">Real Madrid</span><span class="u-time">17.03 21:00</span></div>
+<div class="upcoming-row"><span class="u-home">Arsenal</span><span class="u-vs">vs</span><span class="u-away">Leverkusen</span><span class="u-time">17.03 21:00</span></div>
+<div class="upcoming-row"><span class="u-home">Barça</span><span class="u-vs">vs</span><span class="u-away">Newcastle</span><span class="u-time">18.03 18:45</span></div>
+<div class="upcoming-row"><span class="u-home">Liverpool</span><span class="u-vs">vs</span><span class="u-away">Galatasaray</span><span class="u-time">18.03 21:00</span></div>
+</div>
+<div class="tab-pane" id="tab-PL"><div class="tab-league-title">Premier League</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">Arsenal</td><td class="s-num">31</td><td class="s-num">21</td><td class="s-num">7</td><td class="s-num">3</td><td class="s-num s-gd">+39</td><td class="s-pts">70</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">Man City</td><td class="s-num">30</td><td class="s-num">18</td><td class="s-num">7</td><td class="s-num">5</td><td class="s-num s-gd">+32</td><td class="s-pts">61</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Man United</td><td class="s-num">30</td><td class="s-num">15</td><td class="s-num">9</td><td class="s-num">6</td><td class="s-num s-gd">+13</td><td class="s-pts">54</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Aston Villa</td><td class="s-num">30</td><td class="s-num">15</td><td class="s-num">6</td><td class="s-num">9</td><td class="s-num s-gd">+3</td><td class="s-pts">51</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">Liverpool</td><td class="s-num">30</td><td class="s-num">14</td><td class="s-num">7</td><td class="s-num">9</td><td class="s-num s-gd">+9</td><td class="s-pts">49</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Chelsea</td><td class="s-num">30</td><td class="s-num">13</td><td class="s-num">9</td><td class="s-num">8</td><td class="s-num s-gd">+18</td><td class="s-pts">48</td></tr>
+<tr ><td class="s-pos">7</td><td class="s-team">Brentford</td><td class="s-num">30</td><td class="s-num">13</td><td class="s-num">6</td><td class="s-num">11</td><td class="s-num s-gd">+4</td><td class="s-pts">45</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Everton</td><td class="s-num">30</td><td class="s-num">12</td><td class="s-num">7</td><td class="s-num">11</td><td class="s-num s-gd">-1</td><td class="s-pts">43</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Newcastle</td><td class="s-num">30</td><td class="s-num">12</td><td class="s-num">6</td><td class="s-num">12</td><td class="s-num s-gd">0</td><td class="s-pts">42</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Bournemouth</td><td class="s-num">30</td><td class="s-num">9</td><td class="s-num">14</td><td class="s-num">7</td><td class="s-num s-gd">-2</td><td class="s-pts">41</td></tr>
+</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Erling Haaland</span><span class="sc-team">Man City</span><span class="sc-goals">22</span><span class="sc-assists">+7a</span></div>
+<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Thiago Rodrigues</span><span class="sc-team">Brentford</span><span class="sc-goals">19</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Antoine Semenyo</span><span class="sc-team">Man City</span><span class="sc-goals">15</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">João Pedro</span><span class="sc-team">Chelsea</span><span class="sc-goals">14</span><span class="sc-assists">+5a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Hugo Ekitike</span><span class="sc-team">Liverpool</span><span class="sc-goals">11</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Viktor Gyökeres</span><span class="sc-team">Arsenal</span><span class="sc-goals">11</span><span class="sc-assists">+0a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Dominic Calvert-Lewin</span><span class="sc-team">Leeds United</span><span class="sc-goals">10</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Danny Welbeck</span><span class="sc-team">Brighton Hove</span><span class="sc-goals">10</span><span class="sc-assists">+0a</span></div>
+</div><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Wolverhampton</span><span class="r-score win-a">0:4</span><span class="r-away">Man City</span></div>
+<div class="result-row"><span class="r-home">Tottenham</span><span class="r-score win-h">3:0</span><span class="r-away">Burnley</span></div>
+<div class="result-row"><span class="r-home">Sunderland</span><span class="r-score win-h">3:0</span><span class="r-away">West Ham</span></div>
+<div class="result-row"><span class="r-home">Brighton Hove</span><span class="r-score draw">1:1</span><span class="r-away">Fulham</span></div>
+<div class="result-row"><span class="r-home">Aston Villa</span><span class="r-score draw">0:0</span><span class="r-away">Newcastle</span></div>
+<div class="result-row"><span class="r-home">Liverpool</span><span class="r-score win-h">4:2</span><span class="r-away">Bournemouth</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">Bournemouth</span><span class="u-vs">vs</span><span class="u-away">Man United</span><span class="u-time">20.03 21:00</span></div>
+<div class="upcoming-row"><span class="u-home">Brighton Hove</span><span class="u-vs">vs</span><span class="u-away">Liverpool</span><span class="u-time">21.03 13:30</span></div>
+<div class="upcoming-row"><span class="u-home">Fulham</span><span class="u-vs">vs</span><span class="u-away">Burnley</span><span class="u-time">21.03 16:00</span></div>
+<div class="upcoming-row"><span class="u-home">Everton</span><span class="u-vs">vs</span><span class="u-away">Chelsea</span><span class="u-time">21.03 18:30</span></div>
+<div class="upcoming-row"><span class="u-home">Leeds United</span><span class="u-vs">vs</span><span class="u-away">Brentford</span><span class="u-time">21.03 21:00</span></div>
+</div>
+<div class="tab-pane" id="tab-PD"><div class="tab-league-title">La Liga</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">Barça</td><td class="s-num">28</td><td class="s-num">23</td><td class="s-num">1</td><td class="s-num">4</td><td class="s-num s-gd">+49</td><td class="s-pts">70</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">Real Madrid</td><td class="s-num">28</td><td class="s-num">21</td><td class="s-num">3</td><td class="s-num">4</td><td class="s-num s-gd">+36</td><td class="s-pts">66</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Atleti</td><td class="s-num">28</td><td class="s-num">17</td><td class="s-num">6</td><td class="s-num">5</td><td class="s-num s-gd">+22</td><td class="s-pts">57</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Villarreal</td><td class="s-num">28</td><td class="s-num">17</td><td class="s-num">4</td><td class="s-num">7</td><td class="s-num s-gd">+18</td><td class="s-pts">55</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">Real Betis</td><td class="s-num">28</td><td class="s-num">11</td><td class="s-num">11</td><td class="s-num">6</td><td class="s-num s-gd">+8</td><td class="s-pts">44</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Celta</td><td class="s-num">28</td><td class="s-num">10</td><td class="s-num">11</td><td class="s-num">7</td><td class="s-num s-gd">+7</td><td class="s-pts">41</td></tr>
+<tr ><td class="s-pos">7</td><td class="s-team">Real Sociedad</td><td class="s-num">28</td><td class="s-num">10</td><td class="s-num">8</td><td class="s-num">10</td><td class="s-num s-gd">+1</td><td class="s-pts">38</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Espanyol</td><td class="s-num">28</td><td class="s-num">10</td><td class="s-num">7</td><td class="s-num">11</td><td class="s-num s-gd">-7</td><td class="s-pts">37</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Getafe</td><td class="s-num">28</td><td class="s-num">10</td><td class="s-num">5</td><td class="s-num">13</td><td class="s-num s-gd">-7</td><td class="s-pts">35</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Athletic</td><td class="s-num">28</td><td class="s-num">10</td><td class="s-num">5</td><td class="s-num">13</td><td class="s-num s-gd">-10</td><td class="s-pts">35</td></tr>
+</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Kylian Mbappé</span><span class="sc-team">Real Madrid</span><span class="sc-goals">23</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Vedat Muriqi</span><span class="sc-team">Mallorca</span><span class="sc-goals">18</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Lamine Yamal</span><span class="sc-team">Barça</span><span class="sc-goals">14</span><span class="sc-assists">+9a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Ante Budimir</span><span class="sc-team">Osasuna</span><span class="sc-goals">13</span><span class="sc-assists">+0a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Ferrán Torres</span><span class="sc-team">Barça</span><span class="sc-goals">12</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Borja Iglesias</span><span class="sc-team">Celta</span><span class="sc-goals">12</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Mikel Oyarzabal</span><span class="sc-team">Real Sociedad</span><span class="sc-goals">12</span><span class="sc-assists">+3a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Raphinha</span><span class="sc-team">Barça</span><span class="sc-goals">11</span><span class="sc-assists">+3a</span></div>
+</div><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Celta</span><span class="r-score win-a">0:2</span><span class="r-away">Getafe</span></div>
+<div class="result-row"><span class="r-home">Valencia</span><span class="r-score draw">1:1</span><span class="r-away">Real Sociedad</span></div>
+<div class="result-row"><span class="r-home">Alavés</span><span class="r-score win-h">2:1</span><span class="r-away">Levante</span></div>
+<div class="result-row"><span class="r-home">Mallorca</span><span class="r-score win-a">0:3</span><span class="r-away">Barça</span></div>
+<div class="result-row"><span class="r-home">Villarreal</span><span class="r-score win-h">2:0</span><span class="r-away">Real Oviedo</span></div>
+<div class="result-row"><span class="r-home">Girona</span><span class="r-score win-a">1:3</span><span class="r-away">Rayo Vallecano</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">Villarreal</span><span class="u-vs">vs</span><span class="u-away">Real Sociedad</span><span class="u-time">20.03 21:00</span></div>
+<div class="upcoming-row"><span class="u-home">Elche</span><span class="u-vs">vs</span><span class="u-away">Mallorca</span><span class="u-time">21.03 14:00</span></div>
+<div class="upcoming-row"><span class="u-home">Espanyol</span><span class="u-vs">vs</span><span class="u-away">Getafe</span><span class="u-time">21.03 16:15</span></div>
+<div class="upcoming-row"><span class="u-home">Levante</span><span class="u-vs">vs</span><span class="u-away">Real Oviedo</span><span class="u-time">21.03 18:30</span></div>
+<div class="upcoming-row"><span class="u-home">Osasuna</span><span class="u-vs">vs</span><span class="u-away">Girona</span><span class="u-time">21.03 18:30</span></div>
+</div>
+<div class="tab-pane" id="tab-SA"><div class="tab-league-title">Serie A</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">Inter</td><td class="s-num">29</td><td class="s-num">22</td><td class="s-num">2</td><td class="s-num">5</td><td class="s-num s-gd">+42</td><td class="s-pts">68</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">Milan</td><td class="s-num">29</td><td class="s-num">17</td><td class="s-num">9</td><td class="s-num">3</td><td class="s-num s-gd">+23</td><td class="s-pts">60</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Napoli</td><td class="s-num">29</td><td class="s-num">18</td><td class="s-num">5</td><td class="s-num">6</td><td class="s-num s-gd">+15</td><td class="s-pts">59</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Como 1907</td><td class="s-num">29</td><td class="s-num">15</td><td class="s-num">9</td><td class="s-num">5</td><td class="s-num s-gd">+26</td><td class="s-pts">54</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">Juventus</td><td class="s-num">29</td><td class="s-num">15</td><td class="s-num">8</td><td class="s-num">6</td><td class="s-num s-gd">+23</td><td class="s-pts">53</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Roma</td><td class="s-num">29</td><td class="s-num">16</td><td class="s-num">3</td><td class="s-num">10</td><td class="s-num s-gd">+16</td><td class="s-pts">51</td></tr>
+<tr ><td class="s-pos">7</td><td class="s-team">Atalanta</td><td class="s-num">29</td><td class="s-num">12</td><td class="s-num">11</td><td class="s-num">6</td><td class="s-num s-gd">+13</td><td class="s-pts">47</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Bologna</td><td class="s-num">29</td><td class="s-num">12</td><td class="s-num">6</td><td class="s-num">11</td><td class="s-num s-gd">+4</td><td class="s-pts">42</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Lazio</td><td class="s-num">29</td><td class="s-num">10</td><td class="s-num">10</td><td class="s-num">9</td><td class="s-num s-gd">+1</td><td class="s-pts">40</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Sassuolo</td><td class="s-num">29</td><td class="s-num">11</td><td class="s-num">5</td><td class="s-num">13</td><td class="s-num s-gd">-4</td><td class="s-pts">38</td></tr>
+</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Lautaro Martínez</span><span class="sc-team">Inter</span><span class="sc-goals">14</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Anastasios Douvikas</span><span class="sc-team">Como 1907</span><span class="sc-goals">10</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Rasmus Højlund</span><span class="sc-team">Napoli</span><span class="sc-goals">10</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Nico Paz</span><span class="sc-team">Como 1907</span><span class="sc-goals">9</span><span class="sc-assists">+6a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Keinan Davis</span><span class="sc-team">Udinese</span><span class="sc-goals">9</span><span class="sc-assists">+3a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Kenan Yıldız</span><span class="sc-team">Juventus</span><span class="sc-goals">9</span><span class="sc-assists">+6a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Rafael Leão</span><span class="sc-team">Milan</span><span class="sc-goals">9</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Gianluca Scamacca</span><span class="sc-team">Atalanta</span><span class="sc-goals">8</span><span class="sc-assists">+1a</span></div>
+</div><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Como 1907</span><span class="r-score win-h">2:0</span><span class="r-away">Lazio</span></div>
+<div class="result-row"><span class="r-home">Cagliari</span><span class="r-score draw">1:1</span><span class="r-away">Fiorentina</span></div>
+<div class="result-row"><span class="r-home">Roma</span><span class="r-score win-h">1:0</span><span class="r-away">Bologna</span></div>
+<div class="result-row"><span class="r-home">Milan</span><span class="r-score win-a">1:2</span><span class="r-away">Cremonese</span></div>
+<div class="result-row"><span class="r-home">Sassuolo</span><span class="r-score win-a">0:2</span><span class="r-away">Napoli</span></div>
+<div class="result-row"><span class="r-home">Genoa</span><span class="r-score draw">0:0</span><span class="r-away">Lecce</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">Cagliari</span><span class="u-vs">vs</span><span class="u-away">Napoli</span><span class="u-time">20.03 18:30</span></div>
+<div class="upcoming-row"><span class="u-home">Genoa</span><span class="u-vs">vs</span><span class="u-away">Udinese</span><span class="u-time">20.03 20:45</span></div>
+<div class="upcoming-row"><span class="u-home">Parma</span><span class="u-vs">vs</span><span class="u-away">Cremonese</span><span class="u-time">21.03 15:00</span></div>
+<div class="upcoming-row"><span class="u-home">Milan</span><span class="u-vs">vs</span><span class="u-away">Torino</span><span class="u-time">21.03 18:00</span></div>
+<div class="upcoming-row"><span class="u-home">Juventus</span><span class="u-vs">vs</span><span class="u-away">Sassuolo</span><span class="u-time">21.03 20:45</span></div>
+</div>
+<div class="tab-pane" id="tab-BL1"><div class="tab-league-title">Bundesliga</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">Bayern</td><td class="s-num">26</td><td class="s-num">21</td><td class="s-num">4</td><td class="s-num">1</td><td class="s-num s-gd">+68</td><td class="s-pts">67</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">Dortmund</td><td class="s-num">26</td><td class="s-num">17</td><td class="s-num">7</td><td class="s-num">2</td><td class="s-num s-gd">+29</td><td class="s-pts">58</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Hoffenheim</td><td class="s-num">26</td><td class="s-num">15</td><td class="s-num">5</td><td class="s-num">6</td><td class="s-num s-gd">+20</td><td class="s-pts">50</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Stuttgart</td><td class="s-num">26</td><td class="s-num">15</td><td class="s-num">5</td><td class="s-num">6</td><td class="s-num s-gd">+17</td><td class="s-pts">50</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">RB Leipzig</td><td class="s-num">26</td><td class="s-num">14</td><td class="s-num">5</td><td class="s-num">7</td><td class="s-num s-gd">+13</td><td class="s-pts">47</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Leverkusen</td><td class="s-num">26</td><td class="s-num">13</td><td class="s-num">6</td><td class="s-num">7</td><td class="s-num s-gd">+16</td><td class="s-pts">45</td></tr>
+<tr ><td class="s-pos">7</td><td class="s-team">Frankfurt</td><td class="s-num">26</td><td class="s-num">10</td><td class="s-num">8</td><td class="s-num">8</td><td class="s-num s-gd">0</td><td class="s-pts">38</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Freiburg</td><td class="s-num">26</td><td class="s-num">9</td><td class="s-num">7</td><td class="s-num">10</td><td class="s-num s-gd">-6</td><td class="s-pts">34</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Union Berlin</td><td class="s-num">26</td><td class="s-num">8</td><td class="s-num">7</td><td class="s-num">11</td><td class="s-num s-gd">-11</td><td class="s-pts">31</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Augsburg</td><td class="s-num">26</td><td class="s-num">9</td><td class="s-num">4</td><td class="s-num">13</td><td class="s-num s-gd">-14</td><td class="s-pts">31</td></tr>
+</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Harry Kane</span><span class="sc-team">Bayern</span><span class="sc-goals">30</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Deniz Undav</span><span class="sc-team">Stuttgart</span><span class="sc-goals">16</span><span class="sc-assists">+4a</span></div>
+<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Luis Díaz</span><span class="sc-team">Bayern</span><span class="sc-goals">15</span><span class="sc-assists">+9a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Sehrou Guirassy</span><span class="sc-team">Dortmund</span><span class="sc-goals">12</span><span class="sc-assists">+0a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Haris Tabaković</span><span class="sc-team">M'gladbach</span><span class="sc-goals">11</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Michael Olise</span><span class="sc-team">Bayern</span><span class="sc-goals">10</span><span class="sc-assists">+17a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Christoph Baumgartner</span><span class="sc-team">RB Leipzig</span><span class="sc-goals">10</span><span class="sc-assists">+6a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Nadiem Amiri</span><span class="sc-team">Mainz</span><span class="sc-goals">10</span><span class="sc-assists">+2a</span></div>
+</div><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Heidenheim</span><span class="r-score win-a">1:3</span><span class="r-away">Wolfsburg</span></div>
+<div class="result-row"><span class="r-home">Union Berlin</span><span class="r-score win-h">2:1</span><span class="r-away">Stuttgart</span></div>
+<div class="result-row"><span class="r-home">Freiburg</span><span class="r-score win-a">1:3</span><span class="r-away">Augsburg</span></div>
+<div class="result-row"><span class="r-home">Leverkusen</span><span class="r-score win-a">1:2</span><span class="r-away">Hoffenheim</span></div>
+<div class="result-row"><span class="r-home">Frankfurt</span><span class="r-score win-h">4:1</span><span class="r-away">Bremen</span></div>
+<div class="result-row"><span class="r-home">Bayern</span><span class="r-score win-h">6:0</span><span class="r-away">RB Leipzig</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">RB Leipzig</span><span class="u-vs">vs</span><span class="u-away">Hoffenheim</span><span class="u-time">20.03 20:30</span></div>
+<div class="upcoming-row"><span class="u-home">Heidenheim</span><span class="u-vs">vs</span><span class="u-away">Leverkusen</span><span class="u-time">21.03 15:30</span></div>
+<div class="upcoming-row"><span class="u-home">Wolfsburg</span><span class="u-vs">vs</span><span class="u-away">Bremen</span><span class="u-time">21.03 15:30</span></div>
+<div class="upcoming-row"><span class="u-home">1. FC Köln</span><span class="u-vs">vs</span><span class="u-away">M'gladbach</span><span class="u-time">21.03 15:30</span></div>
+<div class="upcoming-row"><span class="u-home">Bayern</span><span class="u-vs">vs</span><span class="u-away">Union Berlin</span><span class="u-time">21.03 15:30</span></div>
+</div>
+<div class="tab-pane" id="tab-FL1"><div class="tab-league-title">Ligue 1</div><table class="standings-table"><tr class="s-header"><th class="s-pos">#</th><th class="s-team">Druzyna</th><th class="s-num">M</th><th class="s-num">W</th><th class="s-num">R</th><th class="s-num">L</th><th class="s-num">RB</th><th class="s-pts">PKT</th></tr><tr style="color:#00cc55"><td class="s-pos">1</td><td class="s-team">PSG</td><td class="s-num">25</td><td class="s-num">18</td><td class="s-num">3</td><td class="s-num">4</td><td class="s-num s-gd">+32</td><td class="s-pts">57</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">2</td><td class="s-team">RC Lens</td><td class="s-num">26</td><td class="s-num">18</td><td class="s-num">2</td><td class="s-num">6</td><td class="s-num s-gd">+26</td><td class="s-pts">56</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">3</td><td class="s-team">Marseille</td><td class="s-num">26</td><td class="s-num">15</td><td class="s-num">4</td><td class="s-num">7</td><td class="s-num s-gd">+20</td><td class="s-pts">49</td></tr>
+<tr style="color:#00cc55"><td class="s-pos">4</td><td class="s-team">Olympique Lyon</td><td class="s-num">26</td><td class="s-num">14</td><td class="s-num">5</td><td class="s-num">7</td><td class="s-num s-gd">+13</td><td class="s-pts">47</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">5</td><td class="s-team">Lille</td><td class="s-num">26</td><td class="s-num">13</td><td class="s-num">5</td><td class="s-num">8</td><td class="s-num s-gd">+7</td><td class="s-pts">44</td></tr>
+<tr style="color:#ffaa44"><td class="s-pos">6</td><td class="s-team">Monaco</td><td class="s-num">26</td><td class="s-num">13</td><td class="s-num">4</td><td class="s-num">9</td><td class="s-num s-gd">+8</td><td class="s-pts">43</td></tr>
+<tr ><td class="s-pos">7</td><td class="s-team">Stade Rennais</td><td class="s-num">26</td><td class="s-num">12</td><td class="s-num">7</td><td class="s-num">7</td><td class="s-num s-gd">+6</td><td class="s-pts">43</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">8</td><td class="s-team">Strasbourg</td><td class="s-num">26</td><td class="s-num">10</td><td class="s-num">7</td><td class="s-num">9</td><td class="s-num s-gd">+9</td><td class="s-pts">37</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">9</td><td class="s-team">Lorient</td><td class="s-num">26</td><td class="s-num">9</td><td class="s-num">10</td><td class="s-num">7</td><td class="s-num s-gd">-3</td><td class="s-pts">37</td></tr>
+<tr style="color:#ff5544"><td class="s-pos">10</td><td class="s-team">Brest</td><td class="s-num">26</td><td class="s-num">10</td><td class="s-num">6</td><td class="s-num">10</td><td class="s-num s-gd">-2</td><td class="s-pts">36</td></tr>
+</table><div class="subsection-title">&#9917; Top Strzelcy</div><div class="scorers-list"><div class="scorer-row"><span class="sc-rank">1</span><span class="sc-name">Mason Greenwood</span><span class="sc-team">Marseille</span><span class="sc-goals">15</span><span class="sc-assists">+5a</span></div>
+<div class="scorer-row"><span class="sc-rank">2</span><span class="sc-name">Joaquín Panichelli</span><span class="sc-team">Strasbourg</span><span class="sc-goals">14</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">3</span><span class="sc-name">Esteban Lepaul</span><span class="sc-team">Stade Rennais</span><span class="sc-goals">14</span><span class="sc-assists">+3a</span></div>
+<div class="scorer-row"><span class="sc-rank">4</span><span class="sc-name">Wesley Saïd</span><span class="sc-team">RC Lens</span><span class="sc-goals">10</span><span class="sc-assists">+2a</span></div>
+<div class="scorer-row"><span class="sc-rank">5</span><span class="sc-name">Bradley Barcola</span><span class="sc-team">PSG</span><span class="sc-goals">10</span><span class="sc-assists">+1a</span></div>
+<div class="scorer-row"><span class="sc-rank">6</span><span class="sc-name">Odsonne Edouard</span><span class="sc-team">RC Lens</span><span class="sc-goals">10</span><span class="sc-assists">+3a</span></div>
+<div class="scorer-row"><span class="sc-rank">7</span><span class="sc-name">Pavel Šulc</span><span class="sc-team">Olympique Lyon</span><span class="sc-goals">9</span><span class="sc-assists">+3a</span></div>
+<div class="scorer-row"><span class="sc-rank">8</span><span class="sc-name">Pierre-Emerick Aubameyang</span><span class="sc-team">Marseille</span><span class="sc-goals">8</span><span class="sc-assists">+5a</span></div>
+</div><div class="subsection-title">&#128200; xG Tabela (Understat)</div><p class="no-data">Brak danych xG &mdash; <a href="https://understat.com" target="_blank">Understat &#8594;</a></p><div class="subsection-title">Ostatnie Wyniki</div><div class="result-row"><span class="r-home">Auxerre</span><span class="r-score win-h">1:0</span><span class="r-away">Lorient</span></div>
+<div class="result-row"><span class="r-home">Brest</span><span class="r-score draw">3:3</span><span class="r-away">Lille</span></div>
+<div class="result-row"><span class="r-home">Nice</span><span class="r-score win-a">0:1</span><span class="r-away">Toulouse</span></div>
+<div class="result-row"><span class="r-home">Monaco</span><span class="r-score win-h">3:1</span><span class="r-away">Le Havre</span></div>
+<div class="result-row"><span class="r-home">RC Lens</span><span class="r-score win-a">0:1</span><span class="r-away">Olympique Lyon</span></div>
+<div class="result-row"><span class="r-home">Stade Rennais</span><span class="r-score win-h">1:0</span><span class="r-away">Marseille</span></div>
+<div class="subsection-title">Najblizsze Mecze</div><div class="upcoming-row"><span class="u-home">RC Lens</span><span class="u-vs">vs</span><span class="u-away">Angers SCO</span><span class="u-time">20.03 20:45</span></div>
+<div class="upcoming-row"><span class="u-home">Toulouse</span><span class="u-vs">vs</span><span class="u-away">Lorient</span><span class="u-time">21.03 17:00</span></div>
+<div class="upcoming-row"><span class="u-home">Auxerre</span><span class="u-vs">vs</span><span class="u-away">Brest</span><span class="u-time">21.03 19:00</span></div>
+<div class="upcoming-row"><span class="u-home">Nice</span><span class="u-vs">vs</span><span class="u-away">PSG</span><span class="u-time">21.03 21:00</span></div>
+<div class="upcoming-row"><span class="u-home">Olympique Lyon</span><span class="u-vs">vs</span><span class="u-away">Monaco</span><span class="u-time">22.03 15:00</span></div>
+</div>
 
     </div>
 
@@ -1243,165 +807,213 @@ footer a { color: #444; }
 
     <div class="box">
       <div class="box-hdr" style="background:#1a0030;">&#128483; Neymar Jr &mdash; aktualny status</div>
-      <div class="neymar-box">
-      <div class="neymar-headline">&#128308; Neymar Jr i reprezentacja Brazylii — saga trwa</div>
-      <div class="neymar-text">Po ponad roku rehabilitacji po zerwaniu ACL Neymar wrócił do gry w Al-Hilal, ale jego miejsce w selekcji kadry Brazylii pozostaje otwarte. Selekcjoner Dorival Júnior jasno: <strong>"Neymar musi wygrać zdrowie, zanim wygramy z nim mecz."</strong> Sam zainteresowany na Instagramie: <em>"Wróce. Nie wiem kiedy, ale wróce."</em> Kibice Brazylii czekają. Reszta świata też — bo futbol bez Neymara jest o klasę nudniejszy.</div>
-      <div class="neymar-link"><a href="https://www.transfermarkt.pl/neymar/profil/spieler/68290" target="_blank">Transfermarkt — profil Neymara &#8594;</a></div>
-    </div>
+      <div class="neymar-box"><div class="neymar-headline">&#128308; Neymar Jr i reprezentacja Brazylii — saga trwa</div><div class="neymar-text">Po ponad roku rehabilitacji po zerwaniu ACL Neymar wrocil do gry w Al-Hilal, ale jego miejsce w selekcji kadry Brazylii pozostaje otwarte. Selekcjoner Dorival Junior jasno: <strong>"Neymar musi wygraC zdrowie, zanim wygramy z nim mecz."</strong> Sam zainteresowany na Instagramie: <em>"Wroce. Nie wiem kiedy, ale wroce."</em> Kibice Brazylii czekaja. Reszta swiata tez — bo futbol bez Neymara jest o klase nudniejszy.</div><div class="neymar-link"><a href="https://www.transfermarkt.pl/neymar/profil/spieler/68290" target="_blank">Transfermarkt — profil Neymara &#8594;</a></div></div>
     </div>
 
     <div class="box">
       <div class="box-hdr" style="background:#001830;">&#128172; Z konferencji prasowych</div>
-      <div class="cytat-item">
-          <div class="cytat-text">"Nie rozmawiamy o remisach. Gramy żeby wygrywać. Remis to porażka w przebraniu."</div>
-          <div class="cytat-meta"><strong>Pep Guardiola</strong> (Manchester City) &mdash; <em>po konferencji przed meczem ligowym</em></div>
-        </div>
-<div class="cytat-item">
-          <div class="cytat-text">"Real Madryt nigdy nie jest favoritem. Ale zawsze wygrywa."</div>
-          <div class="cytat-meta"><strong>Carlo Ancelotti</strong> (Real Madryt) &mdash; <em>przed fazą pucharową UCL</em></div>
-        </div>
-<div class="cytat-item">
-          <div class="cytat-text">"Kiedy masz 20 lat i grasz w Realu, nie pytasz czy jesteś gotowy. Po prostu grasz."</div>
-          <div class="cytat-meta"><strong>Jude Bellingham</strong> (Real Madryt) &mdash; <em>wywiad dla Sky Sports</em></div>
-        </div>
-<div class="cytat-item">
-          <div class="cytat-text">"Mam 17 lat i gram dla Barcelony. To jedyne co wiem. Reszta to szum."</div>
-          <div class="cytat-meta"><strong>Lamine Yamal</strong> (FC Barcelona) &mdash; <em>konferencja prasowa przed El Clasico</em></div>
-        </div>
+      <div class="cytat-item"><div class="cytat-text">"Nie rozmawiamy o remisach. Gramy zeby wygrywaC. Remis to porazka w przebraniu."</div><div class="cytat-meta"><strong>Pep Guardiola</strong> (Manchester City) &mdash; <em>po konferencji przed meczem ligowym</em></div></div>
+<div class="cytat-item"><div class="cytat-text">"Real Madryt nigdy nie jest faworytem. Ale zawsze wygrywa."</div><div class="cytat-meta"><strong>Carlo Ancelotti</strong> (Real Madryt) &mdash; <em>przed faza pucharowa UCL</em></div></div>
+<div class="cytat-item"><div class="cytat-text">"Kiedy masz 20 lat i grasz w Realu, nie pytasz czy jestes gotowy. Po prostu grasz."</div><div class="cytat-meta"><strong>Jude Bellingham</strong> (Real Madryt) &mdash; <em>wywiad dla Sky Sports</em></div></div>
+<div class="cytat-item"><div class="cytat-text">"Mam 17 lat i gram dla Barcelony. To jedyne co wiem. Reszta to szum."</div><div class="cytat-meta"><strong>Lamine Yamal</strong> (FC Barcelona) &mdash; <em>konferencja prasowa przed El Clasico</em></div></div>
 
     </div>
 
     <div class="box" id="ciekawostki">
       <div class="box-hdr">&#129504; Ciekawostki</div>
-      <div class="ciekawostka-item">
-          <span class="ciek-num">#01</span>
-          <p><strong>Lamine Yamal urodził się 13 lipca 2007</strong> — dokładnie w dniu finału Mundialu, kiedy Iniesta świętował złoto. 17 lat później Yamal wygrał EURO 2024 z tą samą reprezentacją. Scenarzysta piłki nożnej ma niesamowite poczucie humoru.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#02</span>
-          <p><strong>Zinedine Zidane</strong> zakończył karierę główką w Materazziego w finale MŚ 2006. Ten sam Zidane zdobył dwa gole głową w finale MŚ 1998. Symetria doskonała — nikt jej nie zaplanował, ale wszyscy pamiętają.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#03</span>
-          <p><strong>Lech Poznań w 1992 roku</strong> dotarł do ćwierćfinału Ligi Mistrzów i grał z Barceloną Johana Cruyffa — Dreamteamem z Guardiolą, Stoichkovem i Laudrupem. Przegrali 1-3 i 0-4, ale historia jest legendarna. Polska liga miała swój moment.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#04</span>
-          <p><strong>Ronald Koeman</strong> strzelił ponad 80 goli z rzutów wolnych przez całą karierę. Był obrońcą. Większość napastników mogłaby mu pozazdrościć skuteczności.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#05</span>
-          <p><strong>FC Barcelona przez ponad 100 lat</strong> (1899–2006) grała bez żadnego sponsora na koszulce. Potem wzięła kasę od Qatar Foundation i wszystko się zmieniło. Przynajmniej byli ostatni z wielkich, którzy to zrobili.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#06</span>
-          <p><strong>Cristiano Ronaldo i Neymar Jr</strong> obchodzą urodziny tego samego dnia — 5 lutego. CR7 w 1985, Neymar w 1992. Dwie największe gwiazdy swojej generacji, jeden dzień urodzin. Kosmos.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#07</span>
-          <p><strong>Erling Haaland w sezonie 2022/23</strong> strzelił 52 gole we wszystkich rozgrywkach dla Manchesteru City. Premier League, FA Cup, UCL — wszędzie. W poprzednim sezonie Salah pobił rekord PL z 32 golami. Haaland przekroczył to w samej lidze.</p>
-        </div>
-<div class="ciekawostka-item">
-          <span class="ciek-num">#08</span>
-          <p><strong>Robert Lewandowski w sezonie 2020/21</strong> strzelił 41 goli w Bundeslidze, bijąc rekord Gerda Müllera z 1971/72, który stał przez 49 lat. Bayern wygrał ligę, a Lewy dostał... drugie miejsce w Złotej Piłce przez COVID. Sprawiedliwość jest ślepa.</p>
-        </div>
+      <div class="ciekawostka-item"><span class="ciek-num">#01</span><p><strong>Lamine Yamal urodzil sie 13 lipca 2007</strong> — dokladnie w dniu finalu Mundialu, kiedy Iniesta swietowal zloto. 17 lat pozniej Yamal wygral EURO 2024 z ta sama reprezentacja. Scenarzysta pilki noznej ma niesamowite poczucie humoru.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#02</span><p><strong>Zinedine Zidane</strong> zakonczyl kariere glowka w Materazzim w finale MS 2006. Ten sam Zidane zdobyl dwa gole glowa w finale MS 1998. Symetria doskonala — nikt jej nie zaplanowal, ale wszyscy pamietaja.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#03</span><p><strong>Lech Poznan w 1992 roku</strong> dotarl do cwierc finalu Ligi Mistrzow i gral z Barcelona Johana Cruyffa — Dreamteamem z Guardiolą, Stoichkovem i Laudrupem. Przegrali 1:3 i 0:4, ale historia jest legendarna.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#04</span><p><strong>Ronald Koeman</strong> strzeli ponad 80 goli z rzutow wolnych przez cala kariere. Byl obronca. Wiekszosc napastnikow moglaby mu pozazdroscic skutecznosci.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#05</span><p><strong>FC Barcelona przez ponad 100 lat</strong> (1899–2006) grala bez zadnego sponsora na koszulce. Potem wziela kase od Qatar Foundation. Przynajmniej byli ostatni z wielkich, ktorzy to zrobili.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#06</span><p><strong>Cristiano Ronaldo i Neymar Jr</strong> obchodza urodziny tego samego dnia — 5 lutego. CR7 w 1985, Neymar w 1992. Dwie najwieksze gwiazdy swojej generacji, jeden dzien urodzin. Kosmos.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#07</span><p><strong>Erling Haaland w sezonie 2022/23</strong> strzeli 52 gole we wszystkich rozgrywkach dla Manchesteru City. W samej PL przekroczyl rekord Salaha z 32 golami. Norweg gra w innym wymiarze.</p></div>
+<div class="ciekawostka-item"><span class="ciek-num">#08</span><p><strong>Robert Lewandowski w sezonie 2020/21</strong> strzeli 41 goli w Bundeslidze, bijac rekord Gerda Mullera z 1971/72, ktory stal przez 49 lat. Lewy dostal... drugie miejsce w Zlotej Pilce przez COVID.</p></div>
 
     </div>
 
+    <!-- Weszlo.com — polska pilka -->
+    <div class="box">
+      <div class="box-hdr" style="background:#003010;">&#127477;&#127473; Weszlo.com <span class="sub">polska pilka</span></div>
+      <div class="news-item"><div class="news-cat">Mistrzostwa Świata 2026</div><div class="news-title"><a href="https://weszlo.com/bez-precedensu-meksyk-gotowy-na-przyjecie-iranu-w-trakcie-ms-2026" target="_blank" rel="noopener">Bez precedensu! Meksyk gotowy na przyjęcie Iranu podczas MŚ 2026</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Ekstraklasa</div><div class="news-title"><a href="https://weszlo.com/zaskakujacy-pomysl-wichniarka-widzi-w-kadrze-napastnika-legii" target="_blank" rel="noopener">Szokujący pomysł Wichniarka! Widzi w kadrze napastnika Legii</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Inne ligi zagraniczne</div><div class="news-title"><a href="https://weszlo.com/quincy-promes-przyznal-sie-do-zarzucanego-mu-czynu" target="_blank" rel="noopener">Promes przerwał milczenie i przyznał się do popełnienia jednego z czynów</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Piłka nożna</div><div class="news-title"><a href="https://weszlo.com/problemy-ze-skladem-jest-swiatelko-w-tunelu-dla-reprezentacji-polski" target="_blank" rel="noopener">Problemy kadrowe? Jest światełko w tunelu dla reprezentacji Polski</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Inne ligi zagraniczne</div><div class="news-title"><a href="https://weszlo.com/tajemniczy-zbychpol-w-azji-niezwykly-obraz-mongolskiej-pilki" target="_blank" rel="noopener">Zbychpol na rynku mongolskim, czyli niezwykły obraz tamtejszej piłki</a></div><div class="news-date">17.03</div></div>
+<div class="news-item"><div class="news-cat">Polecane</div><div class="news-title"><a href="https://weszlo.com/wujek-sebek-w-najslabszym-spoiwie-co-wie-o-pilce-14-odcinek" target="_blank" rel="noopener">Wujek Sebek w Najsłabszym Spoiwie! Co wie o piłce? | 14. ODCINEK</a></div><div class="news-date">17.03</div></div>
+
+      <div style="text-align:right;padding:6px 14px;font-size:11px;color:var(--muted);">
+        <a href="https://weszlo.com" target="_blank">weszlo.com &#8594;</a>
+      </div>
+    </div>
+
+    <!-- Tifo Football — filmy taktyczne -->
+    <div class="box">
+      <div class="box-hdr" style="background:#0a0018;">&#127910; Tifo Football <span class="sub">YouTube</span></div>
+      <div class="video-item"><img class="video-thumb" src="https://i3.ytimg.com/vi/BPx0Ybzgzys/hqdefault.jpg" alt="Who did it better? 😂👀" loading="lazy"><div class="video-info"><div class="video-title"><a href="https://www.youtube.com/shorts/BPx0Ybzgzys" target="_blank" rel="noopener">Who did it better? 😂👀</a></div><div class="video-date">Tifo Football &nbsp;|&nbsp; 2026-03-17</div></div></div>
+<div class="video-item"><img class="video-thumb" src="https://i3.ytimg.com/vi/b4P4P-4OMJA/hqdefault.jpg" alt=""You had hair" 😅" loading="lazy"><div class="video-info"><div class="video-title"><a href="https://www.youtube.com/shorts/b4P4P-4OMJA" target="_blank" rel="noopener">"You had hair" 😅</a></div><div class="video-date">Tifo Football &nbsp;|&nbsp; 2026-03-17</div></div></div>
+<div class="video-item"><img class="video-thumb" src="https://i3.ytimg.com/vi/nlOjxU-XrtY/hqdefault.jpg" alt=""HOW can you allow that to happen?!" | J" loading="lazy"><div class="video-info"><div class="video-title"><a href="https://www.youtube.com/watch?v=nlOjxU-XrtY" target="_blank" rel="noopener">"HOW can you allow that to happen?!" | Jamie Carragher analyses Chelsea defeat to Newcastle</a></div><div class="video-date">Tifo Football &nbsp;|&nbsp; 2026-03-17</div></div></div>
+<div class="video-item"><img class="video-thumb" src="https://i2.ytimg.com/vi/U7Ge-nXDqFc/hqdefault.jpg" alt="EVERY Max Dowman touch vs Everton! 🌟" loading="lazy"><div class="video-info"><div class="video-title"><a href="https://www.youtube.com/shorts/U7Ge-nXDqFc" target="_blank" rel="noopener">EVERY Max Dowman touch vs Everton! 🌟</a></div><div class="video-date">Tifo Football &nbsp;|&nbsp; 2026-03-17</div></div></div>
+
+      <div style="text-align:right;padding:6px 14px;font-size:11px;color:var(--muted);">
+        <a href="https://www.youtube.com/@TifoFootball" target="_blank">YouTube &#8594;</a>
+      </div>
+    </div>
+
+    <!-- Reddit r/ekstraklasa -->
+    <div class="box">
+      <div class="box-hdr" style="background:#003310;">&#128172; r/ekstraklasa <span class="sub">Reddit</span></div>
+      <p class="no-data">Brak danych z Reddit.</p>
+      <div style="text-align:right;padding:6px 14px;font-size:11px;color:var(--muted);">
+        <a href="https://reddit.com/r/ekstraklasa" target="_blank">r/ekstraklasa &#8594;</a>
+      </div>
+    </div>
+
     <div class="box" id="radar">
-      <div class="box-hdr" style="background:#00356A;">&#128308;&#128309; FC Barcelona Radar</div>
-      <div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://www.sofascore.com/team/football/fc-barcelona/2817" target="_blank">Wyniki i tabela La Liga</a><br>
-          <span class="r-desc">Sofascore — aktualne statystyki, tabela, terminarz FC Barcelona</span></div>
-        </div>
-<div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://www.transfermarkt.pl/lamine-yamal/profil/spieler/983709" target="_blank">Lamine Yamal</a><br>
-          <span class="r-desc">Transfermarkt — profil, wycena, historia transferów</span></div>
-        </div>
-<div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://fbref.com/en/squads/206d90db/FC-Barcelona-Stats" target="_blank">Statystyki zaawansowane</a><br>
-          <span class="r-desc">FBref — xG, pressing, posiadanie — Barca pod lupą</span></div>
-        </div>
+      <div class="box-hdr" style="background:#00356a;">&#128308;&#128309; FC Barcelona Radar</div>
+      <div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://www.sofascore.com/team/football/fc-barcelona/2817" target="_blank">Wyniki i tabela La Liga</a><br><span class="r-desc">Sofascore — aktualne statystyki, tabela, terminarz FC Barcelona</span></div></div>
+<div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://www.transfermarkt.pl/lamine-yamal/profil/spieler/983709" target="_blank">Lamine Yamal</a><br><span class="r-desc">Transfermarkt — profil, wycena, historia transferow</span></div></div>
+<div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://fbref.com/en/squads/206d90db/FC-Barcelona-Stats" target="_blank">Statystyki zaawansowane</a><br><span class="r-desc">FBref — xG, pressing, posiadanie — Barca pod lupa</span></div></div>
 
     </div>
 
     <div class="box">
       <div class="box-hdr" style="background:#38003c;">&#128995; Premier League Radar</div>
-      <div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://www.sofascore.com/tournament/football/england/premier-league/17#tab:standings" target="_blank">Tabela Premier League</a><br>
-          <span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy</span></div>
-        </div>
-<div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Statystyki ligowe</a><br>
-          <span class="r-desc">FBref — zaawansowane statystyki wszystkich drużyn PL</span></div>
-        </div>
-<div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://www.transfermarkt.pl/premier-league/startseite/wettbewerb/GB1" target="_blank">Transfery i wyceny</a><br>
-          <span class="r-desc">Transfermarkt — wartości rynkowe zawodników Premier League</span></div>
-        </div>
+      <div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://www.sofascore.com/tournament/football/england/premier-league/17#tab:standings" target="_blank">Tabela Premier League</a><br><span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy</span></div></div>
+<div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://fbref.com/en/comps/9/Premier-League-Stats" target="_blank">Statystyki ligowe</a><br><span class="r-desc">FBref — zaawansowane statystyki wszystkich druzyn PL</span></div></div>
+<div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://www.transfermarkt.pl/premier-league/startseite/wettbewerb/GB1" target="_blank">Transfery i wyceny</a><br><span class="r-desc">Transfermarkt — wartosci rynkowe zawodnikow Premier League</span></div></div>
 
     </div>
 
     <div class="box">
-      <div class="box-hdr" style="background:#8B0000;">&#128993; La Liga Radar</div>
-      <div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://www.sofascore.com/tournament/football/spain/laliga/8#tab:standings" target="_blank">Tabela La Liga</a><br>
-          <span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy La Liga</span></div>
-        </div>
-<div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Statystyki ligowe</a><br>
-          <span class="r-desc">FBref — zaawansowane statystyki La Liga</span></div>
-        </div>
-<div class="radar-item">
-          <span class="r-bullet">&#9733;</span>
-          <div><a href="https://www.transfermarkt.pl/primera-division/startseite/wettbewerb/ES1" target="_blank">Transfery i wyceny</a><br>
-          <span class="r-desc">Transfermarkt — wartości rynkowe zawodników La Liga</span></div>
-        </div>
+      <div class="box-hdr" style="background:#8b0000;">&#128993; La Liga Radar</div>
+      <div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://www.sofascore.com/tournament/football/spain/laliga/8#tab:standings" target="_blank">Tabela La Liga</a><br><span class="r-desc">Sofascore — aktualna tabela, wyniki, strzelcy La Liga</span></div></div>
+<div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://fbref.com/en/comps/12/La-Liga-Stats" target="_blank">Statystyki ligowe</a><br><span class="r-desc">FBref — zaawansowane statystyki La Liga</span></div></div>
+<div class="radar-item"><span class="r-bullet">&#9733;</span><div><a href="https://www.transfermarkt.pl/primera-division/startseite/wettbewerb/ES1" target="_blank">Transfery i wyceny</a><br><span class="r-desc">Transfermarkt — wartosci rynkowe zawodnikow La Liga</span></div></div>
 
     </div>
 
+    <!-- Ekstraklasa — linki reczne (nie w API) -->
+    <div class="box">
+      <div class="box-hdr" style="background:#003310;">&#127477;&#127473; Ekstraklasa <span class="sub">linki zewnetrzne</span></div>
+      <div class="ekstra-item">
+        <a href="https://www.sofascore.com/tournament/football/poland/ekstraklasa/77" target="_blank">Tabela i wyniki &#8594;</a>
+        <span>Sofascore</span>
+      </div>
+      <div class="ekstra-item">
+        <a href="https://fbref.com/en/comps/36/Ekstraklasa-Stats" target="_blank">Statystyki zaawansowane &#8594;</a>
+        <span>FBref</span>
+      </div>
+      <div class="ekstra-item">
+        <a href="https://www.transfermarkt.pl/ekstraklasa/startseite/wettbewerb/PL1" target="_blank">Wyceny zawodnikow &#8594;</a>
+        <span>Transfermarkt</span>
+      </div>
+      <div class="ekstra-item">
+        <a href="https://www.90minut.pl" target="_blank">Wyniki i archiwum &#8594;</a>
+        <span>90minut.pl</span>
+      </div>
+    </div>
+
+    <!-- Szybkie linki -->
     <div class="box">
       <div class="box-hdr">&#128279; Szybkie Linki</div>
       <div class="quick-link"><span>Wyniki na zywo</span><a href="https://www.flashscore.pl" target="_blank">Flashscore &#8594;</a></div>
       <div class="quick-link"><span>Statystyki zaawansowane</span><a href="https://fbref.com" target="_blank">FBref &#8594;</a></div>
       <div class="quick-link"><span>Wyceny zawodnikow</span><a href="https://www.transfermarkt.pl" target="_blank">Transfermarkt &#8594;</a></div>
-      <div class="quick-link"><span>Sofascore</span><a href="https://www.sofascore.com" target="_blank">Sofascore &#8594;</a></div>
+      <div class="quick-link"><span>Live i tabele</span><a href="https://www.sofascore.com" target="_blank">Sofascore &#8594;</a></div>
       <div class="quick-link"><span>Oficjalna UCL</span><a href="https://www.uefa.com" target="_blank">UEFA &#8594;</a></div>
+      <div class="quick-link"><span>Polska pilka</span><a href="https://www.90minut.pl" target="_blank">90minut.pl &#8594;</a></div>
     </div>
 
   </div>
 
-</div><!-- /container -->
+</div>
 
 <footer>
-  &#9733; DOBITKA &mdash; agregator sportowy dla kibicow bez czasu na chaos &#9733;<br><br>
-  Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a> (CC BY 4.0) &nbsp;|&nbsp;
+  &#9733; DOBITKA v2.0 &mdash; agregator sportowy dla kibicow bez czasu na chaos &#9733;<br><br>
+  Dane: <a href="https://www.football-data.org" target="_blank">football-data.org</a> (CC BY 4.0)
+  &nbsp;|&nbsp; <a href="https://www.thesportsdb.com" target="_blank">TheSportsDB</a>
+  &nbsp;|&nbsp; <a href="https://understat.com" target="_blank">Understat</a> (xG)
+  &nbsp;|&nbsp; <a href="https://reddit.com/r/soccer" target="_blank">Reddit</a>
+  &nbsp;|&nbsp; <a href="https://weszlo.com" target="_blank">Weszlo.com</a>
+  &nbsp;|&nbsp;
   Linki prowadza do oryginalnych zrodel. Opisy redakcji wlasne.<br>
   Zero trackerow. Zero reklam.
 </footer>
 
 <script>
+const FDAPI = '5c3d0ef9844f4ea2a181f5da86028d35';
+const SUPPORTED_CODES = new Set(['CL','PL','PD','SA','BL1','FL1']);
+
+const LEAGUE_NAMES = {
+  CL:'Champions League', PL:'Premier League', PD:'La Liga',
+  SA:'Serie A', BL1:'Bundesliga', FL1:'Ligue 1'
+};
+
+// Tab switching
 function showTab(code) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  var pane = document.getElementById('tab-' + code);
+  const pane = document.getElementById('tab-' + code);
   if (pane) pane.classList.add('active');
   document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.getAttribute('onclick').includes(code)) b.classList.add('active');
+    if (b.dataset.code === code) b.classList.add('active');
   });
 }
-window.onload = function() {
-  var first = document.querySelector('.tab-pane');
-  if (first) first.classList.add('active');
-};
+
+// Live scores auto-refresh
+async function refreshLive() {
+  const section = document.getElementById('live-section');
+  const container = document.getElementById('live-container');
+  if (!container || !FDAPI) return;
+
+  try {
+    const resp = await fetch('https://api.football-data.org/v4/matches?status=IN_PLAY', {
+      headers: { 'X-Auth-Token': FDAPI }
+    });
+    if (!resp.ok) throw new Error('status ' + resp.status);
+    const data = await resp.json();
+    const matches = (data.matches ?? []).filter(m =>
+      SUPPORTED_CODES.has(m.competition?.code ?? '')
+    );
+
+    if (matches.length === 0) {
+      if (section) section.classList.add('hidden');
+      return;
+    }
+    if (section) section.classList.remove('hidden');
+
+    container.innerHTML = matches.map(m => {
+      const comp   = LEAGUE_NAMES[m.competition?.code] ?? m.competition?.name ?? '';
+      const home   = m.homeTeam?.shortName ?? m.homeTeam?.name ?? '?';
+      const away   = m.awayTeam?.shortName ?? m.awayTeam?.name ?? '?';
+      const scoreH = m.score?.fullTime?.home ?? m.score?.halfTime?.home ?? 0;
+      const scoreA = m.score?.fullTime?.away ?? m.score?.halfTime?.away ?? 0;
+      const minute = m.minute ? m.minute + "'" : 'LIVE';
+      return `<div class="live-card">
+        <div class="lc-comp">${comp}</div>
+        <div class="lc-teams">
+          <span>${home}</span>
+          <span class="lc-score">${scoreH}:${scoreA}</span>
+          <span>${away}</span>
+        </div>
+        <div class="lc-min blink">${minute}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    console.warn('Live refresh error:', e);
+  }
+}
+
+// Init
+window.addEventListener('DOMContentLoaded', () => {
+  // Activate first tab
+  const firstBtn = document.querySelector('.tab-btn');
+  if (firstBtn) showTab(firstBtn.dataset.code);
+  // Live refresh
+  refreshLive();
+  setInterval(refreshLive, 90000);
+});
 </script>
 </body>
 </html>
